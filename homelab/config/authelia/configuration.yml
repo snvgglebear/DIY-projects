@@ -1,0 +1,69 @@
+---
+###############################################################
+#            Authelia configuration (forward-auth)            #
+###############################################################
+# Reference: https://www.authelia.com/configuration/
+# Secrets (jwt_secret, session secret, storage encryption key) are supplied
+# via the AUTHELIA_*_FILE env vars in docker-compose.yml — do not put them
+# here directly.
+
+theme: dark
+
+server:
+  address: "tcp://:9091"
+
+log:
+  level: info
+
+totp:
+  issuer: snvgglebear.com
+
+authentication_backend:
+  file:
+    path: /config/users_database.yml
+    password:
+      algorithm: argon2
+      argon2:
+        variant: argon2id
+        iterations: 3
+        memory: 65536
+        parallelism: 4
+        key_length: 32
+        salt_length: 16
+
+access_control:
+  default_policy: deny
+  rules:
+    # Dashboard and each *arr app require one-factor login.
+    # Bump to two_factor once TOTP is registered for your account.
+    - domain: "dash.snvgglebear.com"
+      policy: one_factor
+    - domain: "*.snvgglebear.com"
+      policy: one_factor
+
+session:
+  name: authelia_session
+  domain: snvgglebear.com
+  same_site: lax
+  expiration: 1h
+  inactivity: 15m
+  remember_me: 1M
+  redis:
+    host: authelia-redis
+    port: 6379
+
+regulation:
+  max_retries: 3
+  find_time: 2m
+  ban_time: 5m
+
+storage:
+  local:
+    path: /config/db.sqlite3
+
+notifier:
+  # Filesystem notifier for initial setup — password reset / 2FA
+  # registration links are written to this file instead of emailed.
+  # Switch to smtp: once you have a mail relay you're comfortable with.
+  filesystem:
+    filename: /config/notification.txt

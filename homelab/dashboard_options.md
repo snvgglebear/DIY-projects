@@ -120,6 +120,10 @@ rather than per-app.
 If you'd rather have per-user accounts baked into the dashboard itself with
 less extra infrastructure, **Homarr** is the next best pick.
 
+A ready-to-adapt implementation of this recommendation (Homepage + Authelia +
+Redis, as a standalone `docker-compose.yml`) is in this folder — see
+[`docker-compose.yml`](./docker-compose.yml) and [`README.md`](./README.md).
+
 ## Authentication
 
 None of the lightweight dashboards should be trusted as your only gate on a

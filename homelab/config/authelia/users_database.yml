@@ -1,0 +1,12 @@
+---
+# Generate password hashes with:
+#   docker run --rm authelia/authelia:latest authelia crypto hash generate argon2 --password 'yourpassword'
+# Then replace the hash below and remove this comment.
+
+users:
+  carl:
+    displayname: "Carl"
+    password: "$argon2id$REPLACE_WITH_GENERATED_HASH"
+    email: carl.macy.stanton@protonmail.com
+    groups:
+      - admins

@@ -1,0 +1,5 @@
+---
+# Enables auto-discovery of containers labeled with homepage.* on the
+# home server. Requires the docker.sock mount in docker-compose.yml.
+my-docker:
+  socket: /var/run/docker.sock
