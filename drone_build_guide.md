@@ -1,6 +1,6 @@
 # Open-Source Camera Drone — Complete Build Guide
 
-**Version:** 1.3
+**Version:** 1.4
 **Date:** August 2025
 **Build Time:** 8–12 hours (excluding 3D print time)
 **Skill Level:** Intermediate (basic soldering and assembly required)
@@ -65,14 +65,15 @@ This guide walks through building a fully open-source, 5" camera drone with an e
 
 ## 3D Printed Frame Assembly
 
-> ✅ **Printer note:** With a 600×600×600mm build volume, a 5" frame's full footprint (arms, ducts, and center plate together) fits easily on a single build plate. This build uses a **unibody frame print** rather than separate arm/duct sections joined with standoffs — fewer parts, no joint hardware, and no need for outsourced printing.
+> ✅ **Printer note:** With a 600×600×600mm build volume, a 5" frame's full part set (arms, ducts, center plate, and any add-on brackets) fits easily on a single build plate, so everything prints in one job regardless of which design you pick. Earlier versions of this guide described the frame as a single-piece "unibody" print — that didn't hold up against the real caged/ducted 5" frame designs verified in purchase list §2. All three options there are multi-part (arms, center plate, and duct sections that bolt together), not one continuous piece; what the large bed buys you is printing all of those parts together in one job instead of splitting the run or outsourcing.
 
-1. **Download a unibody STL** from Printables or Thingiverse (search "5 inch unibody enclosed cage drone frame") — or remix a split-arm design into one plate in your slicer/CAD tool, since your bed size supports it. Save/print the following STL file: [Sample 5" unibody enclosed cage frame — Printables](https://printables.com).
-2. **Print settings:** PETG or Nylon-CF, 3–4 perimeter walls, 25–40% infill for the duct/arm structure, 100% infill for motor mount bosses. A single-piece print typically takes similar total time (8–12 hours) to a multi-part print but runs as one continuous job — start it early so it's not the critical path.
-3. **Bed adhesion for large single-piece prints:** Use a brim or raft given the part's larger footprint, and make sure your bed is leveled across its full working area — large flat sections are more prone to warping at the edges than small split parts were.
-4. **Post-processing:** Remove supports, clean up motor mount holes, and lightly sand any layer lines. Since arms and center plate are one piece, there's no need to test-fit joints — just verify mounting hole alignment against your FC/motor hardware.
-5. **Assemble the cage:** With the frame already unibody, this step is now just attaching the top plate (if separate) and any add-on brackets (camera mount, GPS mast). Leave the top plate off until electronics are installed.
-6. **Mount motors:** Thread motors onto each integrated arm mount using the included screws + threadlocker. Confirm motor rotation direction against your ESC/firmware motor map before final tightening.
+1. **Pick and download a frame design** from purchase list §2 — Option A or B (both replicas of the Lumenier QAV-PRO Whoop 5" caged cinewhoop frame, modeled independently by two different designers) or Option C (a distinct, free 3-part ducted design). All three fit comfortably within your printer's bed with room to spare; lay out every part of whichever design you pick on one plate to print it in a single job.
+2. **Print settings:** PETG or Nylon-CF, 3–4 perimeter walls, 25–40% infill for the duct/arm structure, 100% infill for motor mount bosses. Printing every part of the frame together in one job takes roughly the same total time (8–12 hours) as printing them across separate jobs, but runs as one continuous job — start it early so it's not the critical path.
+3. **Bed adhesion for large multi-part layouts:** Use a brim or raft given how much of the bed is covered, and make sure your bed is leveled across its full working area — large flat sections and tightly-packed parts are more prone to edge warping than a single small part would be.
+4. **Post-processing:** Remove supports, clean up motor mount holes, and lightly sand any layer lines. Test-fit the arm-to-center-plate and duct-section joints before final assembly — these are multi-part designs, so joint fit matters here, unlike it would for a true single-piece print.
+5. **Assemble the cage:** Bolt the arms, center plate, and duct sections together using your chosen design's joint hardware (see purchase list §2), then attach the top plate (if separate) and any add-on brackets (camera mount, GPS mast). Leave the top plate off until electronics are installed.
+   - **Retaining the gimbal mount:** Options A and B are replicas of a frame with a modular cinema camera mount confirmed compatible with gimbals — good odds it also fits the Holybro A8 Mini (55×55×70mm, four M2.5×8mm mounting screws), but test-fit before committing since replica prints can vary slightly from the original. Option C has no confirmed gimbal provision in its design. If your chosen frame doesn't have a compatible mount point and you want to keep the gimbal rather than go to a fixed mount (§11), print a simple custom adapter plate — drilled for the A8 Mini's 4× M2.5 mounting holes on one side and your frame's existing standoff pattern on the other — instead of losing gimbal capability.
+6. **Mount motors:** Thread motors onto each arm mount using the included screws + threadlocker. Confirm motor rotation direction against your ESC/firmware motor map before final tightening.
 
 ---
 
@@ -205,10 +206,12 @@ Replace the 1700KV motors with a lower-KV option (roughly 1400–1500KV) and pai
 - **Tradeoffs:** reduced punch-out/acceleration performance — not a concern for a cruising camera platform, but noticeable if you ever want aggressive maneuvers.
 - Confirm the new propeller still clears the frame's duct/cage geometry before ordering (§3) — a larger prop may not fit the baseline duct clearance.
 
-### 3. Payload: Skip the Gimbal, Use the Fixed Camera Mount
+### 3. Payload: Skip the Gimbal, Use the Fixed Camera Mount — or Retain It
 Mount the action camera (GoPro Session / DJI Osmo Action) directly on the rigid 3D-printed camera bracket (already included in the frame print, §3, and in the parts list at purchase list §6) instead of the Holybro A8 Mini 3-axis gimbal. This removes the gimbal's ~130–180g and its full cost from the build.
 
-> **Note on the mount:** with the gimbal skipped, footage stabilization falls back entirely to the action camera's built-in electronic stabilization (GoPro HyperSmooth / DJI RockSteady) rather than mechanical gimbal stabilization. This is noticeably softer for smooth panning/tilting shots but is fine for straight cruise footage — a reasonable tradeoff if flight time and build simplicity matter more than gimbal-smooth video. The fixed mount bolts to the same front bracket point as the gimbal would, so this is a parts-list decision, not a frame redesign.
+> **Note on the mount:** with the gimbal skipped, footage stabilization falls back entirely to the action camera's built-in electronic stabilization (GoPro HyperSmooth / DJI RockSteady) rather than mechanical gimbal stabilization. This is noticeably softer for smooth panning/tilting shots but is fine for straight cruise footage — a reasonable tradeoff if flight time and build simplicity matter more than gimbal-smooth video.
+
+**If you'd rather keep the gimbal, that's still the default** — the Holybro A8 Mini stays in the parts list (purchase list §6) with nothing else to change. Gimbal-mount compatibility depends on which frame option you picked in §3: Options A and B (Lumenier QAV-PRO Whoop 5" replicas) have a modular cinema mount with good odds of fitting the A8 Mini directly — test-fit first. Option C has no confirmed gimbal provision, so retaining the gimbal on that frame means printing the custom adapter plate described in §3 step 5. Either way, this is a parts-list/mount decision, not a frame redesign.
 
 Combined, these three changes stack: a lighter payload, a more efficient motor/prop draw, and a higher energy-density battery. None require frame changes beyond the prop clearance check in #2.
 
@@ -243,11 +246,12 @@ Combined, these three changes stack: a lighter payload, a more efficient motor/p
 | ArduPilot Forum | [discuss.ardupilot.org](https://discuss.ardupilot.org) |
 | PX4 Forum | [discuss.px4.io](https://discuss.px4.io) |
 | Printables (STL files) | [printables.com](https://printables.com) |
+| Cults3D (STL files) | [cults3d.com](https://cults3d.com) |
 | Thingiverse (STL files) | [thingiverse.com](https://thingiverse.com) |
 | HDZero (digital FPV) | [hd-zero.com](https://www.hd-zero.com) |
 
 ---
 
-**Document Version:** 1.3
+**Document Version:** 1.4
 **Last Updated:** August 2025
 **Companion Documents:** `drone_purchase_list.md`, `drone_requirements_summary.md`

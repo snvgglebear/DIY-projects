@@ -48,13 +48,15 @@
 
 | Qty | Item | Model / Specs | Price | Where to Buy |
 |---|---|---|---|---|
-| 1 | 5" Caged/Ducted Frame — Option A | Replica of the Lumenier QAV-PRO Whoop 5" caged cinewhoop frame; full propeller-guard duct cage; files include STL + STEP + DXF | Free–$20 (confirm current price on listing) | [virk3D — Printables](https://www.printables.com/model/1511864-cinewhoop-5-inch-frame-replica-of-lumenier-qav-pro) |
-| 1 | 5" Caged/Ducted Frame — Option B | Same Lumenier QAV-PRO Whoop 5" replica design, independently modeled by a different designer | ~$57–59 (paid) | [msnikon1995 — Cults3D](https://cults3d.com/en/3d-model/various/frame-cinewhoop-5inch-replica-lumenier-qav-pro-whoop-5-msnikon1995) |
-| 1 | 5" Ducted Frame — Option C | Distinct 3-part ducted 5" frame design (not a Lumenier replica); designer recommends PETG or ABS for strength (PLA+ also reported to work), TPU for landing feet | Free | [carnoforge3D — Cults3D](https://cults3d.com/en/3d-model/various/5-inch-fpv-quadcopter-frame-with-duted-props-freebie) |
+| 1 | 5" Caged/Ducted Frame — Option A | Replica of the Lumenier QAV-PRO Whoop 5" caged cinewhoop frame; full propeller-guard duct cage; files include STL + STEP + DXF; **gimbal mount:** modular cinema mount, good odds it fits the Holybro A8 Mini — test-fit first | Free–$20 (confirm current price on listing) | [virk3D — Printables](https://www.printables.com/model/1511864-cinewhoop-5-inch-frame-replica-of-lumenier-qav-pro) |
+| 1 | 5" Caged/Ducted Frame — Option B | Same Lumenier QAV-PRO Whoop 5" replica design, independently modeled by a different designer; **gimbal mount:** same modular cinema mount as Option A — test-fit first | ~$57–59 (paid) | [msnikon1995 — Cults3D](https://cults3d.com/en/3d-model/various/frame-cinewhoop-5inch-replica-lumenier-qav-pro-whoop-5-msnikon1995) |
+| 1 | 5" Ducted Frame — Option C | Distinct 3-part ducted 5" frame design (not a Lumenier replica); designer recommends PETG or ABS for strength (PLA+ also reported to work), TPU for landing feet; **gimbal mount:** none confirmed in the design — see note below | Free | [carnoforge3D — Cults3D](https://cults3d.com/en/3d-model/various/5-inch-fpv-quadcopter-frame-with-duted-props-freebie) |
 | — | Filament | PETG or Nylon-CF, ~500g–1kg depending on which option above you print | $25–60 | [Prusament](https://prusament.com) • [Amazon](https://www.amazon.com) |
 | 1 set | Hardware (motor screws, FC/GPS standoffs, plus small frame-joint screws — these are multi-part designs, not a single continuous piece) | M2/M3 assorted kit | $8–12 | [Amazon](https://www.amazon.com) • local hardware store |
 
 **Subtotal: ~$35–130** (as low as ~$35 if you pick the free Option C; higher if you go with a paid frame file — all parts for any option print together in a single build-plate job on this bed)
+
+> 🎥 **Retaining the gimbal:** the Holybro A8 Mini gimbal (§6) stays in the parts list by default regardless of which frame option you pick. If you go with Option C (no confirmed gimbal mount), print a small custom adapter plate — drilled for the A8 Mini's 4× M2.5×8mm mounting screws on one side and your frame's standoff pattern on the other — using filament already budgeted above. See build guide §3 step 5 for the full note.
 
 > 💡 With 600×600×600mm of build volume, you also have headroom to print an **oversized duct/cage variant** (thicker guard rings, integrated camera mount, or a slightly larger prop clearance margin) if you want extra impact protection — search Printables/Cults3D for "5 inch cinewhoop caged frame" or "5 inch ducted frame" (searching "unibody" mostly surfaces single-arm designs, not full cages), or scale/remix one of the three options above.
 
@@ -186,6 +188,6 @@
 
 ---
 
-**Document Version:** 1.4
+**Document Version:** 1.5
 **Last Updated:** August 2025
 **Companion Documents:** `drone_build_guide.md`, `drone_requirements_summary.md`
