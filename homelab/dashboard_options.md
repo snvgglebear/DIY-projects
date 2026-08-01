@@ -37,7 +37,7 @@ single dashboard to log into and jump off to any app on the home server.
   access lists).
 - **Deploy**: single Docker container, mount config dir + optionally the
   Docker socket (read-only) for auto-discovery.
-- **Repo**: `gethomepage/homepage`
+- **Links**: [Site / docs](https://gethomepage.dev/) · [GitHub](https://github.com/gethomepage/homepage)
 
 ### 2. Homarr
 
@@ -53,7 +53,7 @@ single dashboard to log into and jump off to any app on the home server.
   history of breaking changes between major versions, less "config as code"
   than Homepage.
 - **Deploy**: Docker container(s) + a database volume.
-- **Repo**: `homarr-labs/homarr`
+- **Links**: [Site / docs](https://homarr.dev/) · [GitHub](https://github.com/homarr-labs/homarr)
 
 ### 3. Dashy
 
@@ -65,7 +65,7 @@ single dashboard to log into and jump off to any app on the home server.
 - **Cons**: fewer *arr-specific "rich" widgets than Homepage (mostly
   status/uptime rather than queue details), UI can feel busier.
 - **Deploy**: single Docker container, single `conf.yml`.
-- **Repo**: `Lissy93/dashy`
+- **Links**: [Site / docs](https://dashy.to/) · [GitHub](https://github.com/Lissy93/dashy)
 
 ### 4. Heimdall
 
@@ -77,6 +77,7 @@ single dashboard to log into and jump off to any app on the home server.
 - **Cons**: development has slowed noticeably vs. Homepage/Dashy; fewer
   integrations; UI-driven config only (no config-as-code).
 - **Deploy**: single Docker container (`linuxserver/heimdall`).
+- **Links**: [Site](https://heimdall.site/) · [GitHub](https://github.com/linuxserver/Heimdall)
 
 ### 5. Organizr
 
@@ -89,6 +90,7 @@ single dashboard to log into and jump off to any app on the home server.
   (may need NPM to strip those headers per-service), UI feels dated, project
   momentum has slowed relative to Homepage.
 - **Deploy**: single Docker container.
+- **Links**: [Site](https://organizr.app/) · [GitHub](https://github.com/causefx/Organizr)
 
 ### 6. Flame
 
@@ -98,6 +100,7 @@ single dashboard to log into and jump off to any app on the home server.
 - **Cons**: minimal widget support compared to Homepage/Homarr, less active
   development.
 - **Deploy**: single Docker container.
+- **Links**: [GitHub](https://github.com/pawelmalak/flame)
 
 ## Comparison at a glance
 
@@ -129,7 +132,7 @@ Redis, as a standalone `docker-compose.yml`) is in this folder — see
 None of the lightweight dashboards should be trusted as your only gate on a
 box exposed via a public domain. Two common patterns:
 
-1. **Forward-auth via Authelia/Authentik in front of NPM**
+1. **Forward-auth via [Authelia](https://www.authelia.com/) ([GitHub](https://github.com/authelia/authelia)) or [Authentik](https://goauthentik.io/) ([GitHub](https://github.com/goauthentik/authentik)) in front of NPM**
    - Run Authelia (or Authentik) as another container on the home server (or
      VPS), configure NPM's "Advanced" tab per proxy host with the
      `auth_request`/forward-auth snippet, and every request to
