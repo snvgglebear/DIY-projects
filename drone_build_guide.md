@@ -1,6 +1,6 @@
 # Open-Source Camera Drone — Complete Build Guide
 
-**Version:** 1.1
+**Version:** 1.2
 **Date:** August 2025
 **Build Time:** 8–12 hours (excluding 3D print time)
 **Skill Level:** Intermediate (basic soldering and assembly required)
@@ -18,7 +18,8 @@
 7. [Flight Controller Configuration](#flight-controller-configuration)
 8. [Testing & Calibration](#testing--calibration)
 9. [First Flight Checklist](#first-flight-checklist)
-10. [Troubleshooting](#troubleshooting)
+10. [FPV Capability (Optional Add-On)](#fpv-capability-optional-add-on)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -33,6 +34,7 @@ This guide walks through building a fully open-source, 5" camera drone with an e
 - Motors/ESC: T-Motor Velox 2207 1700KV + 55A BLHeli_32
 - Battery: 6S 1300–1500mAh LiPo
 - Camera: Action cam (GoPro Session / DJI Osmo Action), optional Holybro A8 Mini gimbal
+- Optional: FPV camera + VTX + goggles for a live first-person video feed (see §10)
 
 ---
 
@@ -55,6 +57,7 @@ This guide walks through building a fully open-source, 5" camera drone with an e
 - Install QGroundControl on your Android phone
 - Install the ExpressLRS Configurator on a laptop
 - Charge at least one 6S LiPo battery
+- If adding FPV, decide analog vs. digital HD before ordering hardware (see §10) — it changes the camera, VTX, and goggle purchases together as a matched set
 
 ---
 
@@ -119,7 +122,7 @@ This build uses two independent 915MHz links: **ExpressLRS (ELRS)** for low-late
 2. Select and flash your chosen firmware (ArduPilot or PX4) — see [ardupilot.org](https://ardupilot.org) or [docs.px4.io](https://docs.px4.io).
 3. Run the **frame setup wizard** and select a 5" quad/X configuration matching your build.
 4. Complete **accelerometer, compass, and radio calibration** wizards in order.
-5. Set up **failsafe behavior** (RTL or land) for RC signal loss and low battery — critical given this build has no live FPV feed.
+5. Set up **failsafe behavior** (RTL or land) for RC signal loss and low battery — critical if you're not running FPV, since there's no live video feed as a backup situational cue.
 6. Configure **motor output test** to confirm correct spin direction for each motor before ever installing propellers.
 
 ---
@@ -144,8 +147,44 @@ This build uses two independent 915MHz links: **ExpressLRS (ELRS)** for low-late
 - [ ] LoRa telemetry connected in QGroundControl
 - [ ] Failsafe settings verified (RTL/land on signal loss or low battery)
 - [ ] Camera recording and mounted securely
+- [ ] FPV video link confirmed clean and goggles paired, if FPV installed (see §10)
+- [ ] FPV camera angle checked for prop-guard obstruction, if FPV installed
 - [ ] Open outdoor area, clear of people/obstacles, legal to fly (see regulatory notes in requirements summary)
 - [ ] First flight in manual/stabilize mode only — confirm control response before enabling autonomous modes
+
+---
+
+## FPV Capability (Optional Add-On)
+
+This build is designed around a smartphone ground station with QGroundControl telemetry — the action camera records locally rather than streaming live. Adding FPV (first-person view) layers in a real-time video feed from the aircraft's perspective, which is useful for threading tighter spaces, judging distance/obstacles more precisely, or simply flying "through the lens" instead of watching from the ground. It's an add-on video path, independent of the existing action-cam recording and QGC telemetry link.
+
+### Choosing a System
+
+| Type | Latency | Image Quality | Cost | Notes |
+|---|---|---|---|---|
+| Analog (5.8GHz) | Lowest (~ms-level) | Low-res, degrades with noise at range | $ | Cheapest, simplest to diagnose in the field, most rugged |
+| Digital HD (e.g., DJI O4, HDZero, Walksnail Avatar) | Low (roughly 20–40ms) | HD, stays clean at range | $$$ | Best image quality; camera + VTX usually bundled as one "air unit" |
+
+For a camera-focused build like this one, digital HD is the more natural fit since it matches the "good picture" goal of the action-cam payload. Analog remains the budget-friendly, easy-to-repair option.
+
+### Hardware Needed (see purchase list §8)
+- Dedicated FPV camera (separate from the action cam — FPV cameras are tuned for latency and dynamic range, not recording quality)
+- Video transmitter (VTX): 5.8GHz analog or a digital HD system
+- FPV goggles (analog goggles, or digital goggles paired with the matching HD system)
+- 5.8GHz antenna (circular polarized recommended over linear — more resistant to multipath interference at range)
+
+### Installation Steps
+1. Mount the FPV camera at the front of the frame, angled slightly down (roughly 20–30°), with a clear line of sight past the prop guards — test-fit first, since an enclosed cage frame can clip into the camera's field of view.
+2. Mount the VTX away from the GPS module and ELRS/LoRa antennas to reduce RF interference; keep its antenna vertical and clear of carbon/metal frame parts.
+3. Wire VTX power from the same battery/PDB rail as the flight electronics — confirm the VTX's input voltage range first (most accept 2S–6S directly, but don't assume).
+4. Connect camera video-out to VTX video-in; set the VTX's output power and channel/band according to local regulations (5.8GHz FPV power limits are generally higher in the US than in the EU — check your local rules before transmitting).
+5. Bind the goggles to the VTX (analog: tune to a matching channel; digital: pair via the system's bind procedure, similar in spirit to the ELRS binding in §5).
+6. No coexistence tuning is needed between FPV video and the existing ELRS/LoRa links — 5.8GHz video and 915MHz control/telemetry sit on separate bands.
+
+### Testing
+- Bench-test the video feed before the first flight: power the drone with props off, put on the goggles, and confirm a clean, correctly oriented, in-focus image.
+- Range-test the video link the same way you range-test ELRS (§8): walk away from the aircraft with props off and watch for signal degradation or dropouts.
+- Re-check propeller balance and vibration (§8) with the FPV camera mounted — it's added mass on the frame and can introduce its own vibration if not secured tightly.
 
 ---
 
@@ -160,6 +199,8 @@ This build uses two independent 915MHz links: **ExpressLRS (ELRS)** for low-late
 | QGroundControl doesn't detect telemetry | OTG adapter/dongle not recognized | Try a different USB-C OTG adapter; confirm phone supports USB host mode |
 | Xbox controller not responding in QGC | Joystick not enabled in settings | Enable joystick input under Application Settings → General |
 | Excessive vibration in camera footage | Loose frame standoffs or unbalanced props | Re-tighten all standoffs; balance propellers before flight |
+| FPV image blank / no signal | VTX/goggle band-channel mismatch, VTX not powered | Confirm matching band and channel on both ends; check VTX power LED |
+| FPV image noisy or dropping out at range | Antenna polarization mismatch, VTX power too low, RF interference | Match antenna polarization on both ends; increase VTX power within legal limits; try a different channel |
 
 ---
 
@@ -175,9 +216,10 @@ This build uses two independent 915MHz links: **ExpressLRS (ELRS)** for low-late
 | PX4 Forum | [discuss.px4.io](https://discuss.px4.io) |
 | Printables (STL files) | [printables.com](https://printables.com) |
 | Thingiverse (STL files) | [thingiverse.com](https://thingiverse.com) |
+| HDZero (digital FPV) | [hd-zero.com](https://www.hd-zero.com) |
 
 ---
 
-**Document Version:** 1.1
+**Document Version:** 1.2
 **Last Updated:** August 2025
 **Companion Documents:** `drone_purchase_list.md`, `drone_requirements_summary.md`

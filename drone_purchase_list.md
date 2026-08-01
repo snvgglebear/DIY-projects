@@ -1,7 +1,7 @@
 # Open-Source Camera Drone — Purchase List
 
 **Build Goal:** Compact camera-capable drone with 3D printed propeller-guard frame, dual-band 915MHz comms (ELRS + LoRa), smartphone/Xbox ground control station
-**Estimated Total:** ~$900–1,250 (depending on smartphone availability)
+**Estimated Total:** ~$900–1,250 (depending on smartphone availability); +$135–970 if adding optional FPV (see §8)
 **Last Updated:** August 2025
 **Note:** Frame cost reduced — owner has a 600×600×600mm printer, so the full unibody cage frame is printed in-house (no outsourced print service needed).
 
@@ -19,6 +19,7 @@
 | Camera Payload | $100–340 |
 | Tools & Misc | $100–120 |
 | **TOTAL** | **~$730–1,325** |
+| FPV System (Optional Add-On, not in TOTAL above) | +$135–970 |
 
 ---
 
@@ -124,6 +125,23 @@
 
 ---
 
+## 8. FPV System (Optional Add-On)
+
+> This section is optional — it's not included in the TOTAL in the summary table above. See the build guide §10 for installation and setup steps. Pick analog or digital HD as a matched set rather than mixing components across systems.
+
+| Qty | Item | Model / Specs | Price | Where to Buy |
+|---|---|---|---|---|
+| 1 | FPV Camera | 1200TVL analog (budget), or digital HD camera module bundled with a system below | $15–90 | [GetFPV](https://www.getfpv.com) • [Foxeer](https://www.foxeer.com) |
+| 1 | Video Transmitter (VTX) | 5.8GHz analog 25–800mW, or digital HD air unit (DJI O4 / HDZero / Walksnail Avatar) | $25–250 | [GetFPV](https://www.getfpv.com) • [DJI Store](https://www.dji.com/fpv) • [HDZero](https://www.hd-zero.com) |
+| 1 | FPV Goggles | Analog goggles (budget), or digital HD goggles matched to the VTX system | $80–599 | [GetFPV](https://www.getfpv.com) • [DJI Store](https://www.dji.com/fpv) • [HDZero](https://www.hd-zero.com) |
+| 1 set | 5.8GHz Antennas (air + goggle) | Circular polarized recommended over linear | $15–30 | [GetFPV](https://www.getfpv.com) |
+
+**Subtotal: ~$135–970** (wide range: budget analog kit vs. full digital HD system)
+
+> 💡 Digital HD systems (DJI O4, HDZero, Walksnail) typically bundle the camera and VTX into one "air unit," which simplifies wiring compared to sourcing a separate analog camera and VTX.
+
+---
+
 ## Firmware & Software (Free)
 
 | Item | Purpose | Link |
@@ -137,12 +155,13 @@
 ## Notes
 
 - Prices are estimates as of August 2025 and will vary by region and vendor stock.
-- The wide cost range reflects optional upgrades (gimbal, new smartphone, outsourced 3D printing) vs. the leanest build using owned hardware.
+- The wide cost range reflects optional upgrades (gimbal, new smartphone, outsourced 3D printing, FPV system) vs. the leanest build using owned hardware.
 - Buy 2–3 extra propeller sets — they are the most common consumable/crash casualty.
 - Confirm 915MHz band legality in your country before purchasing ELRS/LoRa hardware (see Requirements Summary for details).
+- If adding FPV, confirm local 5.8GHz video transmitter power limits before buying a high-power analog or digital system — limits vary by country and are generally more permissive in the US than in the EU.
 
 ---
 
-**Document Version:** 1.1
+**Document Version:** 1.2
 **Last Updated:** August 2025
 **Companion Documents:** `drone_build_guide.md`, `drone_requirements_summary.md`
