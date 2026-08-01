@@ -192,4 +192,4 @@
 
 **Document Version:** 1.6
 **Last Updated:** August 2025
-**Companion Documents:** `drone_build_guide.md`, `drone_frame_merge_guide.md`, `drone_requirements_summary.md`
+**Companion Documents:** `drone_build_guide.md`, `drone_frame_merge_guide.md`, `drone_kit_alternatives.md`, `drone_requirements_summary.md`

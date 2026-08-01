@@ -255,4 +255,4 @@ Combined, these three changes stack: a lighter payload, a more efficient motor/p
 
 **Document Version:** 1.5
 **Last Updated:** August 2025
-**Companion Documents:** `drone_purchase_list.md`, `drone_frame_merge_guide.md`, `drone_requirements_summary.md`
+**Companion Documents:** `drone_purchase_list.md`, `drone_frame_merge_guide.md`, `drone_kit_alternatives.md`, `drone_requirements_summary.md`
