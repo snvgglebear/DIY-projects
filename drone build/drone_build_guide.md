@@ -1,6 +1,6 @@
 # Open-Source Camera Drone — Complete Build Guide
 
-**Version:** 1.4
+**Version:** 1.5
 **Date:** August 2025
 **Build Time:** 8–12 hours (excluding 3D print time)
 **Skill Level:** Intermediate (basic soldering and assembly required)
@@ -68,6 +68,7 @@ This guide walks through building a fully open-source, 5" camera drone with an e
 > ✅ **Printer note:** With a 600×600×600mm build volume, a 5" frame's full part set (arms, ducts, center plate, and any add-on brackets) fits easily on a single build plate, so everything prints in one job regardless of which design you pick. Earlier versions of this guide described the frame as a single-piece "unibody" print — that didn't hold up against the real caged/ducted 5" frame designs verified in purchase list §2. All three options there are multi-part (arms, center plate, and duct sections that bolt together), not one continuous piece; what the large bed buys you is printing all of those parts together in one job instead of splitting the run or outsourcing.
 
 1. **Pick and download a frame design** from purchase list §2 — Option A or B (both replicas of the Lumenier QAV-PRO Whoop 5" caged cinewhoop frame, modeled independently by two different designers) or Option C (a distinct, free 3-part ducted design). All three fit comfortably within your printer's bed with room to spare; lay out every part of whichever design you pick on one plate to print it in a single job.
+   - **Fewer, larger parts?** A search specifically for a real, enclosed/ducted 5" cage design purpose-built with fewer, larger parts didn't turn up a match — the closest hit, ARS-5, is a well-known "few parts" printable 5" frame, but it's an open racing frame without propeller guards, so it doesn't meet this build's enclosed-cage spec. Option C is already the leanest of the three verified options at just 3 parts. If you want to go further, `drone_frame_merge_guide.md` walks through merging Option A's pieces yourself in Onshape (Option A is used there since it includes a STEP file — a much more reliable starting point for a boolean merge than Option C's STL-only files).
 2. **Print settings:** PETG or Nylon-CF, 3–4 perimeter walls, 25–40% infill for the duct/arm structure, 100% infill for motor mount bosses. Printing every part of the frame together in one job takes roughly the same total time (8–12 hours) as printing them across separate jobs, but runs as one continuous job — start it early so it's not the critical path.
 3. **Bed adhesion for large multi-part layouts:** Use a brim or raft given how much of the bed is covered, and make sure your bed is leveled across its full working area — large flat sections and tightly-packed parts are more prone to edge warping than a single small part would be.
 4. **Post-processing:** Remove supports, clean up motor mount holes, and lightly sand any layer lines. Test-fit the arm-to-center-plate and duct-section joints before final assembly — these are multi-part designs, so joint fit matters here, unlike it would for a true single-piece print.
@@ -252,6 +253,6 @@ Combined, these three changes stack: a lighter payload, a more efficient motor/p
 
 ---
 
-**Document Version:** 1.4
+**Document Version:** 1.5
 **Last Updated:** August 2025
-**Companion Documents:** `drone_purchase_list.md`, `drone_requirements_summary.md`
+**Companion Documents:** `drone_purchase_list.md`, `drone_frame_merge_guide.md`, `drone_requirements_summary.md`
