@@ -3,7 +3,7 @@
 **Build Goal:** Compact camera-capable drone with 3D printed propeller-guard frame, dual-band 915MHz comms (ELRS + LoRa), smartphone/Xbox ground control station
 **Estimated Total:** ~$900–1,250 (depending on smartphone availability); +$135–970 if adding optional FPV (§8); flight-time optimizations in §9 can add or save cost depending on which are chosen
 **Last Updated:** August 2025
-**Note:** Frame cost reduced — owner has a 600×600×600mm printer, so the full unibody cage frame is printed in-house (no outsourced print service needed).
+**Note:** Frame cost reduced — owner has a 600×600×600mm printer, so the full caged/ducted frame (all parts) is printed in-house in one job (no outsourced print service needed).
 
 ---
 
@@ -12,13 +12,13 @@
 | Category | Estimated Cost |
 |---|---|
 | Flight Controller & Core Electronics | $275–325 |
-| Frame & Propeller Guards (3D Printed, unibody, home-printed) | $35–90 |
+| Frame & Propeller Guards (3D Printed, home-printed, 3 file options — see §2) | $35–130 |
 | Dual-Band 915MHz Comms System | $145–185 |
 | Ground Control Station (Smartphone) | $0–165 |
 | Battery & Charging | $75–100 |
 | Camera Payload | $100–340 |
 | Tools & Misc | $100–120 |
-| **TOTAL** | **~$730–1,325** |
+| **TOTAL** | **~$730–1,365** |
 | FPV System (Optional Add-On, not in TOTAL above) | +$135–970 |
 | Li-ion Battery Upgrade (Optional, replaces LiPo cost in Battery & Charging above) | +$45–100 vs. baseline LiPo (2 packs) |
 | Skip Gimbal for Fixed Mount (Optional, reduces Camera Payload above) | −$130–180 |
@@ -44,17 +44,19 @@
 
 ## 2. Frame & Propeller Guards (3D Printed)
 
-> ✅ **Owner has a large-format printer (600×600×600mm build volume).** This comfortably exceeds a 5" frame's footprint, so the entire cage/duct frame can be printed as a single unibody piece (no split arms, no multi-part joins/standoffs between duct sections). Outsourced printing is no longer needed — that line item has been removed below.
+> ✅ **Owner has a large-format printer (600×600×600mm build volume).** This comfortably exceeds a 5" frame's footprint. Note: genuinely single-piece "the whole cage prints as one part" designs are uncommon for 5" caged/ducted frames — the real designs below, like most enclosed-cage frames, print as a handful of parts (arms, center plate, duct sections) that bolt together, not one continuous piece. What the large bed actually buys you is printing all of those parts together in a single job instead of splitting the run across multiple prints or outsourcing. Outsourced printing is no longer needed — that line item has been removed below.
 
 | Qty | Item | Model / Specs | Price | Where to Buy |
 |---|---|---|---|---|
-| 1 | 5" Unibody Cage/Ducted Frame STL | Single-piece enclosed rotor-guard design (print in one piece using your printer's full bed) | Free–$20 (file only) | [Printables](https://printables.com) • [Thingiverse](https://thingiverse.com) |
-| — | Filament | PETG or Nylon-CF, ~500g–1kg (single-piece prints use slightly more filament than split designs due to fewer optimized nesting cuts, but save on joint hardware) | $25–60 | [Prusament](https://prusament.com) • [Amazon](https://www.amazon.com) |
-| 1 set | Hardware (motor screws, FC/GPS standoffs — no frame-joint hardware needed with a unibody print) | M2/M3 assorted kit | $8–12 | [Amazon](https://www.amazon.com) • local hardware store |
+| 1 | 5" Caged/Ducted Frame — Option A | Replica of the Lumenier QAV-PRO Whoop 5" caged cinewhoop frame; full propeller-guard duct cage; files include STL + STEP + DXF | Free–$20 (confirm current price on listing) | [virk3D — Printables](https://www.printables.com/model/1511864-cinewhoop-5-inch-frame-replica-of-lumenier-qav-pro) |
+| 1 | 5" Caged/Ducted Frame — Option B | Same Lumenier QAV-PRO Whoop 5" replica design, independently modeled by a different designer | ~$57–59 (paid) | [msnikon1995 — Cults3D](https://cults3d.com/en/3d-model/various/frame-cinewhoop-5inch-replica-lumenier-qav-pro-whoop-5-msnikon1995) |
+| 1 | 5" Ducted Frame — Option C | Distinct 3-part ducted 5" frame design (not a Lumenier replica); designer recommends PETG or ABS for strength (PLA+ also reported to work), TPU for landing feet | Free | [carnoforge3D — Cults3D](https://cults3d.com/en/3d-model/various/5-inch-fpv-quadcopter-frame-with-duted-props-freebie) |
+| — | Filament | PETG or Nylon-CF, ~500g–1kg depending on which option above you print | $25–60 | [Prusament](https://prusament.com) • [Amazon](https://www.amazon.com) |
+| 1 set | Hardware (motor screws, FC/GPS standoffs, plus small frame-joint screws — these are multi-part designs, not a single continuous piece) | M2/M3 assorted kit | $8–12 | [Amazon](https://www.amazon.com) • local hardware store |
 
-**Subtotal: ~$35–90** (no outsourcing cost; single build-plate print run)
+**Subtotal: ~$35–130** (as low as ~$35 if you pick the free Option C; higher if you go with a paid frame file — all parts for any option print together in a single build-plate job on this bed)
 
-> 💡 With 600×600×600mm of build volume, you also have headroom to print an **oversized duct/cage variant** (thicker guard rings, integrated camera mount, or a slightly larger prop clearance margin) in the same single print if you want extra impact protection — search Printables/Thingiverse for "5 inch unibody enclosed frame" or scale/remix a split design into one plate.
+> 💡 With 600×600×600mm of build volume, you also have headroom to print an **oversized duct/cage variant** (thicker guard rings, integrated camera mount, or a slightly larger prop clearance margin) if you want extra impact protection — search Printables/Cults3D for "5 inch cinewhoop caged frame" or "5 inch ducted frame" (searching "unibody" mostly surfaces single-arm designs, not full cages), or scale/remix one of the three options above.
 
 ---
 
@@ -184,6 +186,6 @@
 
 ---
 
-**Document Version:** 1.3
+**Document Version:** 1.4
 **Last Updated:** August 2025
 **Companion Documents:** `drone_build_guide.md`, `drone_requirements_summary.md`
