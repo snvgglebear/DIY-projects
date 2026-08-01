@@ -1,6 +1,6 @@
 # Open-Source Camera Drone — Complete Build Guide
 
-**Version:** 1.2
+**Version:** 1.3
 **Date:** August 2025
 **Build Time:** 8–12 hours (excluding 3D print time)
 **Skill Level:** Intermediate (basic soldering and assembly required)
@@ -19,7 +19,8 @@
 8. [Testing & Calibration](#testing--calibration)
 9. [First Flight Checklist](#first-flight-checklist)
 10. [FPV Capability (Optional Add-On)](#fpv-capability-optional-add-on)
-11. [Troubleshooting](#troubleshooting)
+11. [Flight Time Optimization (Optional)](#flight-time-optimization-optional)
+12. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -31,9 +32,9 @@ This guide walks through building a fully open-source, 5" camera drone with an e
 - Flight controller: Holybro Pixhawk 6C/6X
 - Firmware: ArduPilot or PX4
 - Frame: 5" enclosed cage, PETG or Nylon-CF
-- Motors/ESC: T-Motor Velox 2207 1700KV + 55A BLHeli_32
-- Battery: 6S 1300–1500mAh LiPo
-- Camera: Action cam (GoPro Session / DJI Osmo Action), optional Holybro A8 Mini gimbal
+- Motors/ESC: T-Motor Velox 2207 1700KV + 55A BLHeli_32 (lower-KV variant available for extended flight time — see §11)
+- Battery: 6S 1300–1500mAh LiPo (Li-ion swap available for extended flight time — see §11)
+- Camera: Action cam (GoPro Session / DJI Osmo Action), optional Holybro A8 Mini gimbal (skippable in favor of a lighter fixed mount — see §11)
 - Optional: FPV camera + VTX + goggles for a live first-person video feed (see §10)
 
 ---
@@ -58,6 +59,7 @@ This guide walks through building a fully open-source, 5" camera drone with an e
 - Install the ExpressLRS Configurator on a laptop
 - Charge at least one 6S LiPo battery
 - If adding FPV, decide analog vs. digital HD before ordering hardware (see §10) — it changes the camera, VTX, and goggle purchases together as a matched set
+- If optimizing for flight time, decide on battery chemistry, motor/prop, and gimbal-vs-fixed-mount choices before ordering (see §11) — these affect the parts list, not just assembly
 
 ---
 
@@ -122,7 +124,7 @@ This build uses two independent 915MHz links: **ExpressLRS (ELRS)** for low-late
 2. Select and flash your chosen firmware (ArduPilot or PX4) — see [ardupilot.org](https://ardupilot.org) or [docs.px4.io](https://docs.px4.io).
 3. Run the **frame setup wizard** and select a 5" quad/X configuration matching your build.
 4. Complete **accelerometer, compass, and radio calibration** wizards in order.
-5. Set up **failsafe behavior** (RTL or land) for RC signal loss and low battery — critical if you're not running FPV, since there's no live video feed as a backup situational cue.
+5. Set up **failsafe behavior** (RTL or land) for RC signal loss and low battery — critical if you're not running FPV, since there's no live video feed as a backup situational cue. If you're using a Li-ion pack (§11), set the low-battery voltage thresholds for Li-ion's discharge curve, not LiPo's — see §11 for details.
 6. Configure **motor output test** to confirm correct spin direction for each motor before ever installing propellers.
 
 ---
@@ -145,7 +147,7 @@ This build uses two independent 915MHz links: **ExpressLRS (ELRS)** for low-late
 - [ ] GPS lock acquired (solid lock indicator)
 - [ ] ELRS link bound and showing good RSSI
 - [ ] LoRa telemetry connected in QGroundControl
-- [ ] Failsafe settings verified (RTL/land on signal loss or low battery)
+- [ ] Failsafe settings verified (RTL/land on signal loss or low battery; voltage thresholds match your battery chemistry — see §11 if using Li-ion)
 - [ ] Camera recording and mounted securely
 - [ ] FPV video link confirmed clean and goggles paired, if FPV installed (see §10)
 - [ ] FPV camera angle checked for prop-guard obstruction, if FPV installed
@@ -188,6 +190,30 @@ For a camera-focused build like this one, digital HD is the more natural fit sin
 
 ---
 
+## Flight Time Optimization (Optional)
+
+The baseline spec (6S 1300–1500mAh LiPo, 1700KV motors, gimbal-mounted camera) prioritizes agility and image stabilization over endurance. If flight time matters more than punch-out performance for your use case, the following changes are worth considering — independently or together. See purchase list §9 for the associated parts.
+
+### 1. Battery: Li-ion Instead of High-C LiPo
+Swap the 6S LiPo pack for a 6S Li-ion pack built from high-drain cells (e.g., Molicel P42A/P45B 21700). Li-ion has roughly double the energy density of LiPo at the discharge rates this build actually needs (cruise flight, not racing), so a similarly-sized/weighted pack can extend flight time from ~6–8 minutes to ~12–18 minutes.
+- **Tradeoffs:** lower max discharge current (a non-issue for a cruising camera platform, but avoid punchy throttle stabs), slower charge times, and higher upfront cost (~$60–100/pack vs. $30–40 for LiPo).
+- **Failsafe reconfiguration required:** Li-ion's voltage curve is flatter across most of the discharge range but drops sharply near cutoff, unlike LiPo's more gradual sag. Update the flight controller's low-battery voltage failsafe thresholds (Mission Planner/QGC battery monitor settings) for Li-ion before its first flight — reusing LiPo thresholds risks either a false-early RTL or a battery over-discharged before failsafe triggers.
+- Confirm your charger supports a Li-ion charge profile, not just LiPo — most modern 6S balance chargers do, but check before assuming.
+
+### 2. Motor & Propeller: Lower KV, Larger/Higher-Pitch Prop
+Replace the 1700KV motors with a lower-KV option (roughly 1400–1500KV) and pair with a slightly larger or higher-pitch propeller. This trades peak thrust and agility for efficiency — hover current draw drops noticeably, which extends flight time at effectively no added weight and no added cost versus the baseline motor spec.
+- **Tradeoffs:** reduced punch-out/acceleration performance — not a concern for a cruising camera platform, but noticeable if you ever want aggressive maneuvers.
+- Confirm the new propeller still clears the frame's duct/cage geometry before ordering (§3) — a larger prop may not fit the baseline duct clearance.
+
+### 3. Payload: Skip the Gimbal, Use the Fixed Camera Mount
+Mount the action camera (GoPro Session / DJI Osmo Action) directly on the rigid 3D-printed camera bracket (already included in the frame print, §3, and in the parts list at purchase list §6) instead of the Holybro A8 Mini 3-axis gimbal. This removes the gimbal's ~130–180g and its full cost from the build.
+
+> **Note on the mount:** with the gimbal skipped, footage stabilization falls back entirely to the action camera's built-in electronic stabilization (GoPro HyperSmooth / DJI RockSteady) rather than mechanical gimbal stabilization. This is noticeably softer for smooth panning/tilting shots but is fine for straight cruise footage — a reasonable tradeoff if flight time and build simplicity matter more than gimbal-smooth video. The fixed mount bolts to the same front bracket point as the gimbal would, so this is a parts-list decision, not a frame redesign.
+
+Combined, these three changes stack: a lighter payload, a more efficient motor/prop draw, and a higher energy-density battery. None require frame changes beyond the prop clearance check in #2.
+
+---
+
 ## Troubleshooting
 
 | Symptom | Likely Cause | Fix |
@@ -201,6 +227,8 @@ For a camera-focused build like this one, digital HD is the more natural fit sin
 | Excessive vibration in camera footage | Loose frame standoffs or unbalanced props | Re-tighten all standoffs; balance propellers before flight |
 | FPV image blank / no signal | VTX/goggle band-channel mismatch, VTX not powered | Confirm matching band and channel on both ends; check VTX power LED |
 | FPV image noisy or dropping out at range | Antenna polarization mismatch, VTX power too low, RF interference | Match antenna polarization on both ends; increase VTX power within legal limits; try a different channel |
+| Voltage sag / early failsafe trip under throttle (Li-ion pack) | Li-ion has lower max continuous discharge current than LiPo | Avoid aggressive throttle stabs; if sag persists, use a pack with more parallel cells for higher continuous amperage |
+| Noticeably less punch/climb after motor-prop swap | Lower-KV motor + efficiency prop trades thrust for endurance (§11) | Expected behavior — adjust throttle curve/expo in FC settings if more stick throw is needed |
 
 ---
 
@@ -220,6 +248,6 @@ For a camera-focused build like this one, digital HD is the more natural fit sin
 
 ---
 
-**Document Version:** 1.2
+**Document Version:** 1.3
 **Last Updated:** August 2025
 **Companion Documents:** `drone_purchase_list.md`, `drone_requirements_summary.md`

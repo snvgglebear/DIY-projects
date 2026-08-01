@@ -1,7 +1,7 @@
 # Open-Source Camera Drone — Purchase List
 
 **Build Goal:** Compact camera-capable drone with 3D printed propeller-guard frame, dual-band 915MHz comms (ELRS + LoRa), smartphone/Xbox ground control station
-**Estimated Total:** ~$900–1,250 (depending on smartphone availability); +$135–970 if adding optional FPV (see §8)
+**Estimated Total:** ~$900–1,250 (depending on smartphone availability); +$135–970 if adding optional FPV (§8); flight-time optimizations in §9 can add or save cost depending on which are chosen
 **Last Updated:** August 2025
 **Note:** Frame cost reduced — owner has a 600×600×600mm printer, so the full unibody cage frame is printed in-house (no outsourced print service needed).
 
@@ -20,6 +20,8 @@
 | Tools & Misc | $100–120 |
 | **TOTAL** | **~$730–1,325** |
 | FPV System (Optional Add-On, not in TOTAL above) | +$135–970 |
+| Li-ion Battery Upgrade (Optional, replaces LiPo cost in Battery & Charging above) | +$45–100 vs. baseline LiPo (2 packs) |
+| Skip Gimbal for Fixed Mount (Optional, reduces Camera Payload above) | −$130–180 |
 
 ---
 
@@ -30,11 +32,13 @@
 | 1 | Flight Controller Stack | Holybro Pixhawk 6C (with plastic case) | $220–299 | [Holybro Store](https://holybro.com/products/pixhawk-6c) • [ReadyMadeRC](https://www.readymaderc.com/products/details/86931-holybro-pixhawk-6c-with-plastic-case) • [PyroDrone](https://pyrodrone.com/products/holybro-pixhawk-6c-plastic-case) |
 | 1 | GPS Module | Holybro M8N (budget) or M10 (better accuracy) | $25–45 | [Holybro Store](https://holybro.com/collections/gps) |
 | 4 | Motors | T-Motor Velox 2207 1700KV | $22–28 each (~$90–110 set) | [T-Motor Store](https://www.tmotor.com) • [GetFPV](https://www.getfpv.com) |
+| 4 | Motors (endurance alternative — see §9) | T-Motor Velox 2207 ~1400–1500KV | $22–30 each (~$90–120 set) | [T-Motor Store](https://www.tmotor.com) • [GetFPV](https://www.getfpv.com) |
 | 1 | ESC (4-in-1) | 55A BLHeli_32 4-in-1 ESC | $55–75 | [GetFPV](https://www.getfpv.com) • [PyroDrone](https://pyrodrone.com) |
 | 8 | Propellers | 5040 tri-blade, 6S-compatible (2 sets, incl. spares) | $8–12/set | [GetFPV](https://www.getfpv.com) • [RaceDayQuads](https://www.racedayquads.com) |
+| 8 | Propellers (endurance alternative — pair with lower-KV motors, see §9) | Larger diameter or higher-pitch 6S-compatible, 2 sets incl. spares | $8–14/set | [GetFPV](https://www.getfpv.com) • [RaceDayQuads](https://www.racedayquads.com) |
 | 1 | Power Distribution Board | Matches ESC stack (often bundled) | $0–20 | Bundled with FC stack or [Holybro Store](https://holybro.com) |
 
-**Subtotal: ~$275–325 (excluding spares)**
+**Subtotal: ~$275–325 (excluding spares; endurance alternative motors/props are a like-for-like swap, not an add-on)**
 
 ---
 
@@ -88,11 +92,12 @@
 
 | Qty | Item | Model / Specs | Price | Where to Buy |
 |---|---|---|---|---|
-| 2–3 | Flight Batteries | 6S 1300–1500mAh LiPo, 90–100C | $30–40 each | [GetFPV](https://www.getfpv.com) • [RaceDayQuads](https://www.racedayquads.com) |
-| 1 | Charger | 6S-capable balance charger (e.g., ISDT or SkyRC) | $40–70 | [GetFPV](https://www.getfpv.com) • [Amazon](https://www.amazon.com) |
-| 1 | LiPo Safe Bag | Charging/storage safety bag | $8–12 | [Amazon](https://www.amazon.com) |
+| 2–3 | Flight Batteries (baseline) | 6S 1300–1500mAh LiPo, 90–100C | $30–40 each | [GetFPV](https://www.getfpv.com) • [RaceDayQuads](https://www.racedayquads.com) |
+| 2–3 | Flight Batteries (endurance alternative — see §9) | 6S Li-ion pack, high-drain 21700 cells (e.g., Molicel P42A/P45B) | $60–100 each | [GetFPV](https://www.getfpv.com) • [Amazon](https://www.amazon.com) |
+| 1 | Charger | 6S-capable balance charger with Li-ion charge profile (e.g., ISDT or SkyRC) | $40–70 | [GetFPV](https://www.getfpv.com) • [Amazon](https://www.amazon.com) |
+| 1 | LiPo/Li-ion Safe Bag | Charging/storage safety bag | $8–12 | [Amazon](https://www.amazon.com) |
 
-**Subtotal: ~$75–100** (with 2 batteries; add ~$35 per extra battery)
+**Subtotal: ~$75–100 (LiPo baseline, 2 batteries)** — swapping to Li-ion (§9) runs ~$120–200 for 2 packs; add ~$60–100 per extra Li-ion pack vs. ~$35 per extra LiPo pack.
 
 ---
 
@@ -105,7 +110,9 @@
 | 1 (optional) | Gimbal | Holybro A8 Mini 3-axis gimbal | $130–180 | [Holybro Store](https://holybro.com/products/a8-mini) |
 | 1 | MicroSD Card | 64–128GB, U3/V30 rated | $12–20 | [Amazon](https://www.amazon.com) |
 
-**Subtotal: ~$100–340** (higher end includes gimbal)
+**Subtotal: ~$100–340** (higher end includes gimbal; low end assumes gimbal skipped)
+
+> 💡 Skipping the gimbal and mounting the action camera on the fixed 3D-printed bracket above removes this entire $130–180 line item and ~130–180g of flight weight. See build guide §11 for the stabilization tradeoff this involves.
 
 ---
 
@@ -142,6 +149,20 @@
 
 ---
 
+## 9. Flight Time Optimization (Optional)
+
+> This section summarizes the parts-list impact of the endurance tradeoffs described in build guide §11. None of these are new categories — they modify or replace line items already listed in §1, §5, and §6 above.
+
+| Change | Cost Impact | Weight Impact | Where Listed |
+|---|---|---|---|
+| Li-ion battery instead of LiPo | +$45–100 for 2 packs vs. baseline LiPo | Roughly neutral (similar pack weight, much higher energy density) | §5 |
+| Lower-KV motor + larger/higher-pitch prop | Roughly cost-neutral (like-for-like swap) | No change | §1 |
+| Skip gimbal, use fixed 3D-printed mount | −$130–180 (gimbal removed entirely) | −130–180g | §6 |
+
+**Net effect:** all three together typically save money (the gimbal removal outweighs the Li-ion upgrade cost) while extending flight time — see build guide §11 for the performance/stabilization tradeoffs each one carries.
+
+---
+
 ## Firmware & Software (Free)
 
 | Item | Purpose | Link |
@@ -159,9 +180,10 @@
 - Buy 2–3 extra propeller sets — they are the most common consumable/crash casualty.
 - Confirm 915MHz band legality in your country before purchasing ELRS/LoRa hardware (see Requirements Summary for details).
 - If adding FPV, confirm local 5.8GHz video transmitter power limits before buying a high-power analog or digital system — limits vary by country and are generally more permissive in the US than in the EU.
+- If switching to Li-ion batteries (§9), confirm your charger has a Li-ion charge profile before relying on it — Li-ion charge voltage/current curves differ from LiPo, and not all "6S-capable" chargers support both chemistries out of the box.
 
 ---
 
-**Document Version:** 1.2
+**Document Version:** 1.3
 **Last Updated:** August 2025
 **Companion Documents:** `drone_build_guide.md`, `drone_requirements_summary.md`
