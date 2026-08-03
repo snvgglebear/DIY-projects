@@ -1,283 +1,299 @@
 # Skylight-Linked Bathroom Vent Fan — Design Guide
 
-**Version:** 1.0
+**Version:** 2.0
 **Date:** August 2026
-**Subject:** 24" × 32" chain-operated venting skylight over a bathroom light well (Philadelphia row house)
-**Goal:** Mount an exhaust fan in the ceiling opening below the skylight, fill the rest of the opening with clear plastic so daylight still comes through, and have the skylight open automatically when the fan runs and close when it stops.
+**Subject:** 24" × 32" glazed roof ventilator with a chain-operated side louver, over a bathroom light well (Philadelphia row house)
+**Goal:** Mount an exhaust fan in the ceiling opening below the skylight, fill the rest of the opening with clear plastic so daylight still comes through, and have the louver open automatically when the fan runs and close when it stops.
 **Companion Document:** `skylight_vent_fan_purchase_list.md`
+
+> **v2.0 changelog** — Revised after learning the actual configuration: a **fixed** frosted glass top on a vertical metal box, with a **hinged metal louver in the vertical side wall** as the operable element, and confirmed by testing that rain does not enter when open. This is a different (and considerably more favorable) machine than the hinged-sash skylight v1.0 assumed. Three consequences:
+> - **The rain sensor is gone.** It was the most fragile part of the design.
+> - **The roof penetration is probably gone too** — the vertical metal box gives you an above-roof wall to terminate through, which is much easier and safer than cutting the roof.
+> - **The control system collapses to one part.** A spring-return damper actuator does exactly what you asked for with no relay logic at all.
 
 ---
 
 ## Table of Contents
 
-1. [Identifying Your Skylight](#1-identifying-your-skylight)
-2. [The Central Design Question: Where Does the Air Actually Go?](#2-the-central-design-question-where-does-the-air-actually-go)
-3. [Recommended Design](#3-recommended-design)
-4. [The Clear Ceiling Panel](#4-the-clear-ceiling-panel)
-5. [Motorizing the Skylight](#5-motorizing-the-skylight)
-6. [Control Wiring — Three Tiers](#6-control-wiring--three-tiers)
-7. [Weather, Winter, and Condensation](#7-weather-winter-and-condensation)
-8. [Install Sequence](#8-install-sequence)
-9. [Things That Will Bite You](#9-things-that-will-bite-you)
-10. [Code Notes](#10-code-notes)
+1. [What You Actually Have](#1-what-you-actually-have)
+2. [Why This Configuration Is Good News](#2-why-this-configuration-is-good-news)
+3. [The Design Question: Where Does the Air Terminate?](#3-the-design-question-where-does-the-air-terminate)
+4. [Recommended Design](#4-recommended-design)
+5. [The Clear Ceiling Panel](#5-the-clear-ceiling-panel)
+6. [Motorizing the Louver](#6-motorizing-the-louver)
+7. [Control Wiring](#7-control-wiring)
+8. [One Thing to Check: The Glass](#8-one-thing-to-check-the-glass)
+9. [Condensation and Winter](#9-condensation-and-winter)
+10. [Install Sequence](#10-install-sequence)
+11. [Things That Will Bite You](#11-things-that-will-bite-you)
+12. [Code Notes](#12-code-notes)
 
 ---
 
-## 1. Identifying Your Skylight
+## 1. What You Actually Have
 
-### The short answer
+### The honest answer on identification
 
-I can't identify it with certainty from a description — you'll need to look at it (see "How to confirm" below). But the description is specific enough to narrow it a lot.
+**I don't think you're going to find a brand and model number for this, and it probably doesn't matter.**
 
-**Most likely: a Ventarama venting skylight**, or a close functional equivalent using a Truth Hardware / AmesburyTruth chain operator.
+What you're describing is a **glazed roof ventilator** — a vertical sheet-metal box (riser/curb) standing proud of the roof, capped by a *fixed* sloped light-transmitting panel, with a hinged louver or damper in one vertical face, chain-operated from the room below. In commercial ventilation terms this is a small **louvered penthouse gravity ventilator** with a glazed roof instead of a solid one — the same idea Greenheck and [United Enertech](https://unitedenertech.com/louvered-penthouses) still build at industrial scale, where louvered penthouses serve "as gravity ventilators, fan discharge caps, fresh air intake caps, [and] pressure relief ventilators."
 
-### Why that's the best guess
+In Philadelphia and Baltimore row houses this was usually **local sheet-metal shop work**, not a catalog product. Galvanized or terne-coated steel, soldered seams, wire or obscure glass, fabricated to fit whatever hole was in that particular roof. That's why it's 24 × 32 — a non-standard size that matches no manufacturer's catalog. The [Philadelphia Rowhouse Manual](https://www.phila.gov/media/20190521124726/Philadelphia_Rowhouse_Manual.pdf) is the best general reference on this housing stock's roof assemblies.
 
-Three details in your description point the same direction:
+**This is why my v1.0 guess (Ventarama) was wrong.** Ventarama and the VELUX/CrystaLite family all use a *hinged glazed sash* — the glass itself lifts. Yours doesn't; the glass is fixed and a separate metal louver does the work. Different machine entirely.
 
-1. **Two chains hanging down that you pull to open and close.** This is not two independent chains — it's almost certainly **one continuous chain loop running over a sprocket**, with both strands hanging into the room. Pull the front strand and the sprocket winds the sash open; pull the back strand and it winds it closed. That chain-and-sprocket operator is the signature of this whole class of skylight. Truth Hardware's manual skylight operator line is built exactly this way — [hardened steel sprocket and chain with an acetal case liner](https://www.truth.com/products/Hinged-Window-Hardware/Skylights/Manual-Operators), with the chain detachable at the sash — and Truth operators were the OEM hardware in a lot of these units.
+### What's still true from v1.0
 
-2. **A hinged sash over a light well in a row-house bathroom.** This exact configuration is described in [US Patent 3,350,819, "Ventilating skylight with two simultaneously operated closures"](https://patents.google.com/patent/US3350819A/en) — a skylight serving a bathroom in the *central* portion of a row-type home, reached by a duct or well running from the bathroom ceiling up through the roof, with a roller-and-chain operated hinged panel. That's your house, and that patent's era (mid-1960s) is roughly the era of a lot of Philly row-house skylight retrofits.
+**The two chains are almost certainly one continuous loop over a sprocket or pulley.** Pull one strand, the sprocket rotates and drives the louver's linkage arm open; pull the other, it drives closed. Confirm by grabbing both strands and pulling in opposite directions — if they fight each other, it's a loop. That detail matters for §6, because a rotating shaft is exactly what a damper actuator wants to grab.
 
-3. **It's in Philadelphia.** Ventarama (Northport, NY) sold heavily into the Northeast row-house market — Philadelphia, Baltimore, NYC — for decades. Local roofers still call these "pull chain skylights" as a generic term.
+### What to look at before you buy anything
 
-Other candidates worth ruling out when you look at it: **CrystaLite**, which builds a [venting skylight with a PVC leg dropping into the light well as a mounting surface for a chain-drive Truth opener](https://crystaliteinc.com/pages/products/skylights/venting.php) — a very close match to your description; and any generic curb-mount vent unit that a previous owner fitted with an aftermarket Truth operator.
-
-### How to confirm
-
-Do this before you buy anything — the answer changes which of the paths in §5 makes sense.
-
-- **Look for a nameplate.** Usually a foil or stamped label on the sash frame or the inside of the curb liner, visible when the sash is cranked fully open. Ventarama units are typically labeled.
-- **Photograph the operator housing.** The plastic or metal box the chain runs out of, up at the top of the well. Truth/AmesburyTruth parts carry a molded part number. Post the photo to [SWISCO's discussion forum](https://www.swisco.com/discussions) — they specialize in obsolete window and skylight hardware and are good at IDing these from pictures. Several Ventarama threads already exist there.
-- **Confirm it's one loop, not two chains.** Grab both strands and pull gently in opposite directions. If they're a loop over a sprocket, they'll fight each other. If they move independently, you have a different (rarer) two-line pulley design and the retrofit in §5 needs rethinking.
-- **Measure the curb, not the glass.** Get the *inside* dimension of the curb (the wood box the skylight sits on) and its *outside* dimension. Your "24 × 32" is probably one of those, and which one matters enormously for replacement.
-
-### The bad news, if it is a Ventarama
-
-**Ventarama Skylight Corp. appears to be out of business.** Replacement parts still circulate: SWISCO stocks the [39-214 metal hook](https://www.swisco.com/Metal-Hook/pd/Replacement-Window-Operator-Accessories/39-214) and a [replacement skylight operator with angle drive](https://www.swisco.com/Skylight-operator/pd/Awning-Window-Replacement-Operators/39-379), and at least one vendor advertises aftermarket replacement tops for Ventarama units. But don't plan a design that depends on getting a specific factory part.
-
-### On the 24 × 32 size
-
-Note that **24 × 32 is not a VELUX standard curb size.** VELUX curb-mount sizes go 2222 (22½ × 22½ inside curb), 2230 (22½ × 30½), 2234 (22½ × 34½), 2246, 3030, 3046 — with the outside curb 3" larger in each direction. So if you ever replace the unit outright, you're either **building a new curb** to a VELUX size or **ordering a custom-size unit** (Wasco and Sun-Tek both do made-to-order). Factor that into §5 Path C.
+- **The louver's operating shaft or linkage arm.** This is the single most important thing to photograph. Is there a round shaft the chain sprocket sits on? What diameter? Or is it a flat crank arm on a pivot pin? This determines how the actuator couples in (§6) and it's the one genuinely fiddly part of the whole project.
+- **The louver's free area when fully open** — roughly, height × width of the opening. This is your exhaust aperture and it wants to be comfortably bigger than the duct you'll run.
+- **Whether the metal box has any free wall area** on a face *other* than the louvered one. That's where the wall cap goes (§4).
+- **Condition of the metal and the soldered seams.** Hundred-year-old galvanized has a service life, and if the box is rusting through, that's a separate conversation from this project.
+- **The glass.** See §8 — worth a look while you're up there.
 
 ---
 
-## 2. The Central Design Question: Where Does the Air Actually Go?
+## 2. Why This Configuration Is Good News
 
-This is the part worth thinking hardest about, because the obvious version of your idea has a real problem.
+Genuinely — this is a better starting point than the hinged-sash skylight I assumed in v1.0.
 
-**The obvious version:** fan in the ceiling panel, blowing straight up into the light well. Skylight opens, moist air leaves through it. Clean, simple, no ductwork.
+| | Hinged glazed sash (v1.0 assumption) | **Your louvered ventilator** |
+|---|---|---|
+| Rain when open | Real risk; rain sensor mandatory | **Not an issue** — you've tested it, and the geometry explains why |
+| What moves | Heavy glazed sash, 25–40 lb | Light metal louver on a shaft |
+| Weather seal risk | Moving glazing = a leak path that ages | Glass is **fixed** — nothing to fail |
+| Roof penetration for duct | New cut + flashing, hire a roofer | **Vertical metal wall already above the roof** |
+| Actuator sizing | Marginal; cheap units underpowered | Trivial — it's a damper |
+| Fail-safe on power loss | Stays wherever it was | **Spring closes it** |
 
-**The problem:** the light well is not a duct, and the code doesn't treat it as one. [IRC M1507.2](https://www.jaspector.com/codes/irc-2024/ch15-exhaust-systems/bathroom-exhaust-duct-requirements-irc-2024/) requires bathroom exhaust to discharge **directly to the outdoors** and prohibits discharging "into an attic, crawl space or other areas inside the building." A framed light well with a closed skylight on top is squarely an "area inside the building." An inspector will call it, and more importantly:
+**On the rain:** your testing matches the physics. The louver is in a *vertical* face, shielded by the overhanging sloped glass above it, and louver blades are angled specifically to shed water outward. That's the same reason a louvered penthouse works as a weather-protected intake on a commercial roof. So — **no rain sensor.** In v1.0 that sensor was the most failure-prone component in the design and the reason for half the control complexity. It's simply gone.
 
-- **When the skylight doesn't open, you've built a moisture chamber.** Actuator fails, rain sensor holds it shut, power blip, chain jumps the sprocket — and now you're pumping shower steam into a sealed insulated box with cold glass on top. That's a mold factory in the joist bay, and you won't see it happening.
-- **Even when it works, you get condensation.** Warm wet air hits 20°F glazing, condenses, and runs back down the well onto your clear panel. In a Philadelphia winter this is not hypothetical.
-- **You're heating the neighborhood.** Every fan cycle opens a 24×32 hole in the roof.
-
-So there are three honest paths. I'd build **Path B**.
-
-| | **Path A — Well as plenum** | **Path B — Ducted (recommended)** | **Path C — Replace the skylight** |
-|---|---|---|---|
-| Fan exhausts into | The open light well | A real duct to a roof cap | A real duct to a roof cap |
-| Skylight motorized? | Required — it's the only exit | Optional bonus / boost vent | Yes, factory electric unit |
-| Code | Fails M1507.2 as written | Compliant | Compliant |
-| Fails safe? | **No** — stuck-shut = trapped steam | Yes — fan works regardless | Yes |
-| Cost | $ | $$ | $$$$ |
-| Effort | Low | Medium (roof penetration) | High (roofer required) |
-
-**Path B keeps everything you asked for** — fan in the ceiling opening, clear plastic around it, skylight opens when the fan runs — it just doesn't make the skylight *load-bearing* for the moisture. The skylight opening becomes a genuine bonus: a big passive stack vent that dumps heat and humidity fast, on top of a fan that would work fine on its own.
+Two small caveats I'd note and then drop, since you've tested it: hard wind-driven rain and blowing snow behave differently from ordinary rain, and snow can pack into a louver and freeze it shut. Neither is a reason to change the design. If the louver ever *does* freeze shut, §3's recommendation means your fan keeps working anyway.
 
 ---
 
-## 3. Recommended Design
+## 3. The Design Question: Where Does the Air Terminate?
+
+Same question as v1.0, better answer available.
+
+**The obvious version:** fan blows up into the light well and the metal box, louver opens, air leaves. Simple, no ductwork.
+
+**Why I'd still avoid it:** [IRC M1507.2](https://www.jaspector.com/codes/irc-2024/ch15-exhaust-systems/bathroom-exhaust-duct-requirements-irc-2024/) requires exhaust to discharge directly outdoors and prohibits discharge into interior cavities; a light well and a closed metal box qualify. But the practical argument is stronger than the code argument here:
+
+**A sealed sheet-metal box is the worst possible condensing surface.** Uninsulated metal at outdoor temperature, shower steam pumped into it, glass on top. If the louver is shut — actuator dead, linkage frozen, breaker off — every bit of that moisture condenses on the inside of the box and runs back down the light well onto your new clear panel. You'd find out about it as drips, in January.
+
+**But you have an option v1.0 didn't:** the box's vertical wall is already an exterior wall standing above the roof. That's a *far* better place to terminate a duct than a roof cut.
+
+| | **Path A — Box as plenum** | **Path B — Duct to a wall cap (recommended)** |
+|---|---|---|
+| Fan exhausts into | The metal box, via the louver | A dedicated wall cap in the box's side wall |
+| Louver motorized? | Required — sole exit | Bonus: a big passive boost vent |
+| Code | Fails M1507.2 as written | Compliant |
+| Fails safe? | **No** — louver shut = steam in a cold metal box | Yes — fan works regardless of the louver |
+| Roof work | None | **None** — vertical penetration, not a roof cut |
+| Cost | $ | $$ |
+
+**Path B costs you a hole saw and a $20 wall cap, and it deletes the entire failure mode.** No roofer, no flashing, no roof cement. Cutting a 4" hole in a vertical metal wall above the roofline is about as low-risk as exterior penetrations get — it's a sheet-metal job, sealed with a gasket and a bead of sealant, with gravity working for you instead of against you.
+
+**Siting the wall cap:** put it on a **different face than the louver**. If you terminate on the same face, exhaust leaving the cap gets pulled straight back in through the open louver next to it and you've built a recirculation loop. Opposite face is ideal; adjacent face is fine.
+
+---
+
+## 4. Recommended Design
 
 ```
-                    ┌─── open skylight sash ───┐
-   roof line   ═════╧══════════════════════════╧═════  ← existing curb
-                    │                          │
-                    │   light well / shaft     │   ┌── 4" insulated duct
-                    │                          │   │
-                    │  ┌────────────────────┐  │   │   ┌─ Broan 636 roof cap
-                    │  │  inline fan in a   │──┼───┘   │  (separate penetration
-                    │  │  joist bay beside  │  │       │   through the roof)
-                    │  │  the shaft         │  │       │
-                    │  └─────────┬──────────┘  │
-                    │            │ 6" duct     │
-   ceiling ─────────┴────────────┴─────────────┴──────
-                 clear polycarbonate panel with a
-                 small grille where the duct drops in
+                    ┌── fixed frosted glass (sloped, stays put) ──┐
+                   ╱                                              │
+                  ╱   ┌──────────────────────────────────────┐    │
+    metal box    ╱    │                                      │    │
+    above roof  ╱     │   Belimo LF24 spring-return actuator │    │
+               │      │   on the louver shaft                │    │
+   ┌───────────┤      │                                      ├────┤
+   │ wall cap ◄├──────┼──── 4" duct up from the fan          │    │  ← louver
+   │ (far face)│      │                                      │    │    (this face)
+   └───────────┤      └──────────────────────────────────────┘    │
+   ═════════════╧══════════════════════════════════════════════╧═══  roof line
+                    │                                          │
+                    │           light well / shaft             │
+                    │  ┌────────────────────┐                  │
+                    │  │  inline fan in an  │──── 6" duct ─────┘
+                    │  │  adjacent joist bay│
+                    │  └─────────┬──────────┘
+   ceiling ─────────┴────────────┴──────────────────────────────────
+                 clear polycarbonate panel with a small
+                 off-center inlet grille
 ```
 
-**Key move: use a remote inline fan, not a ceiling fan housing.**
+**Use a remote inline fan, not a ceiling-mount housing.** A conventional ceiling fan is a big white box that has to sit *in* the ceiling plane — right in the middle of your clear panel, blocking the daylight you're trying to preserve, and needing structural support the polycarbonate can't provide. An inline fan like the [Panasonic WhisperLine FV-20NLF1](https://www.amazon.com/Panasonic-FV-20NLF1-WhisperLine-Line-6-Inch/dp/B000EDUIX2) mounts in an adjacent joist bay; all that shows at the ceiling is a small grille. Its housing is insulated specifically against condensation and noise, and the motor ends up 8 feet from your head instead of directly above it.
 
-A conventional ceiling-mount fan (Panasonic WhisperCeiling, Broan) is a big white box that has to sit *in* the ceiling plane — right in the middle of your clear panel, blocking the daylight you're trying to preserve, and needing structural support the polycarbonate can't provide.
+**Sizing:** 50 CFM is the code minimum for intermittent bathroom exhaust; ~1 CFM per square foot of floor is the working rule. A light well adds volume the rule doesn't count, so **80–160 CFM** is the target. The FV-20NLF1 is 240 CFM — use a speed control, or step down to the FV-10NLF1 (160 CFM) in the same family.
 
-An inline fan like the [Panasonic WhisperLine FV-20NLF1](https://www.amazon.com/Panasonic-FV-20NLF1-WhisperLine-Line-6-Inch/dp/B000EDUIX2) mounts remotely — in an adjacent joist bay or hung beside the shaft — and all that appears at the ceiling is a **small inlet grille**. Your clear panel stays almost entirely clear. Bonus: the motor noise is 8 feet away from your head instead of directly above it, and the FV-20NLF1's housing is insulated specifically to stop condensation and noise.
+**Makeup air:** undercut the bathroom door ¾" or fit a grille. Whatever you exhaust has to come back in, or the fan stalls against its own static pressure and the mirror stays foggy.
 
-The FV-20NLF1 is 240 CFM, which is a lot for one bathroom. Options:
-- Use it and put it on a speed control, or
-- Use the smaller FV-10NLF1 (160 CFM) from the same [WhisperLine family](https://na.panasonic.com/us/home-and-building-solutions/ventilation-indoor-air-quality/ventilation-fans/whisperliner-remote-mount-line-fan-240-cfm), or
-- Use a single-inlet install kit ([FV-NLF06G](https://www.amazon.com/Panasonic-FV-NLF06G-WhisperLine-6-Inch-Grille/dp/B00084ZQA2)) and accept the overkill — a bathroom under a skylight well has more volume than a normal bathroom, and oversizing here mostly costs you a little heat.
-
-**Sizing sanity check:** the common rule is ~1 CFM per square foot of floor area, with **50 CFM the code minimum** for intermittent bathroom exhaust. A typical row-house bathroom (say 6' × 8' = 48 sq ft) wants 50–80 CFM nominal. Add capacity for the light well volume and duct length and 80–160 CFM is a reasonable target.
-
-**Makeup air:** whatever CFM you exhaust has to come back in. Undercut the bathroom door ¾" or fit a door with a grille, or the fan will just stall against its own static pressure and you'll wonder why it's not clearing the mirror.
+**What the louver now does for you:** it's a large-aperture passive stack vent, opened on demand. Open louver plus a running fan clears a steamy bathroom dramatically faster than the fan alone, and on a summer night you can open it manually with the chains — as you presumably already do — and get free stack ventilation with no fan at all. Keeping the manual chain operation intact is worth doing for exactly this reason.
 
 ---
 
-## 4. The Clear Ceiling Panel
+## 5. The Clear Ceiling Panel
 
-**Material: polycarbonate, not acrylic.** Acrylic (Plexiglas) is cheaper and slightly clearer, but it's brittle, it crazes, and it's a worse actor in a fire. Polycarbonate (Lexan) is effectively unbreakable at this thickness and handles the temperature swing in a light well without complaint. Get the **UV-coated** version — it's sitting under direct sky all day and uncoated polycarbonate yellows.
+Unchanged from v1.0, and it works better here — since the glass above is fixed, the daylight path is permanent and your panel never interacts with anything that moves.
 
-- Home Depot stocks a [24" × 36" × 0.093" UV-coated Lexan sheet](https://www.homedepot.com/p/LEXAN-24-in-x-36-in-x-0-093-in-Shatter-Resistant-Clear-UV-Coated-Polycarbonate-Sheet-11N43101/333295898) (~$50) that covers a 24×32 opening with trim to spare.
-- For a panel this size spanning unsupported, **0.093" is thin — it will sag and oil-can.** Either step up to ¼" ([24×36 available](https://www.amazon.com/Clear-Polycarbonate-Lexan-Sheet-24/dp/B06XH5T1G3)) or build a light frame (see below). ¼" is the safer call.
+**Material: polycarbonate, not acrylic.** Acrylic is cheaper and marginally clearer but brittle, prone to crazing, and worse in a fire. Polycarbonate (Lexan) is effectively unbreakable at this thickness and shrugs off the temperature swing in a light well. Get the **UV-coated** grade — it sits under open sky all day and uncoated polycarbonate yellows.
 
-**Build it as a removable framed panel, not a glued-in sheet.** You will need to get back up there — to clear the chain, service the actuator, wipe condensation off the glass, or fish a wire. Design for that on day one.
+- Home Depot stocks a [24" × 36" × 0.093" UV-coated Lexan sheet](https://www.homedepot.com/p/LEXAN-24-in-x-36-in-x-0-093-in-Shatter-Resistant-Clear-UV-Coated-Polycarbonate-Sheet-11N43101/333295898) (~$50) that covers a 24 × 32 opening with trim to spare.
+- **0.093" is thin for an unsupported 32" span** — it will sag and oil-can. Step up to ¼" ([24 × 36 available](https://www.amazon.com/Clear-Polycarbonate-Lexan-Sheet-24/dp/B06XH5T1G3)) or add a frame member. ¼" is the safer call.
 
-Suggested construction:
-1. Rip a **1× or ¾" plywood frame** to the inside dimensions of the ceiling opening, with a rabbet or a stop bead to receive the panel.
-2. Drop the polycarbonate in, secure with a **removable stop bead** and screws — no adhesive, no silicone bead you'll have to cut out later.
-3. Cut the grille hole with a hole saw at **slow speed with light pressure**; polycarbonate melts and grabs if you rush it. Leave the protective film on until the very end.
-4. **Never drill polycarbonate tight to a fastener.** Oversize every screw hole by 1/16" so the sheet can move — it expands and contracts noticeably across a 32" span, and a pinned sheet will crack or bow.
-5. Gasket the panel perimeter with closed-cell foam tape so the well is reasonably sealed from the bathroom. You want the fan pulling air through the *grille*, not around the edges of the panel.
+**Build it as a removable framed panel, not a glued-in sheet.** You will need to get back up there — to service the actuator, clear the chain, or fish a wire. Design for that on day one.
 
-**Aesthetic suggestion:** run a thin white or paint-matched trim ring around the grille so it reads as a deliberate fixture rather than a hole punched in a window. And consider putting the grille **off-center**, toward the shower end of the panel — it captures steam better at the source and looks less like a bullseye.
+1. Rip a **1× or ¾" plywood frame** to the opening's inside dimensions, with a rabbet or stop bead to receive the panel.
+2. Drop the sheet in and secure with a **removable stop bead** and screws. No adhesive, no silicone bead you'll be cutting out in three years.
+3. Cut the grille hole with a hole saw at **slow speed, light pressure** — polycarbonate melts and grabs if you rush it. Leave the protective film on until the end.
+4. **Oversize every screw hole by 1/16".** The sheet moves noticeably across a 32" span, and a pinned sheet cracks or bows.
+5. Gasket the perimeter with closed-cell foam tape. You want the fan pulling through the *grille*, not around the panel edges.
 
----
-
-## 5. Motorizing the Skylight
-
-Three paths, matching how much you want to disturb the existing unit.
-
-### Path 1 — Add a chain actuator, keep the manual operator (least invasive)
-
-Mount a **24V electric chain actuator** in the light well, attached to the curb liner, with its chain bracket fixed to the sash. The existing pull-chain operator stays in place as a manual backup — which is genuinely valuable the first time the electronics misbehave.
-
-Typical units: [24V chain actuator, 300–800mm adjustable stroke](https://www.amazon.com/Electric-Actuator-Automatic-Casement-Skylights/dp/B0CGNM2T6N), roughly 10mm/s, with wall switch and remote. For a 24×32 top-hinged sash a **300–400mm stroke** gives a generous opening; more than that and you're fighting the geometry.
-
-**Check the force rating against your sash weight before ordering.** A 24×32 glazed sash with an aluminum frame is plausibly 25–40 lb, and the actuator only sees a fraction of that depending on hinge geometry — but the cheap actuators are rated around 200–300N (45–67 lbf) and the [120V hardwired units advertise ~20 lb lift](https://www.amazon.com/Skylight-Control-Hard-Wired-Adjustable-Skylights/dp/B0DF2QG1MM). If your sash is heavy glass, size up or use two actuators. If the existing manual operator is stiff or gritty, **service or replace it first** — an actuator will happily destroy itself pushing against a seized hinge.
-
-### Path 2 — Replace the manual operator with a factory motorized operator
-
-If the existing operator turns out to be a Truth/AmesburyTruth unit, there may be a direct electric replacement in the same family. Worth a phone call to SWISCO with your part photo before you go the aftermarket-actuator route.
-
-### Path 3 — Replace the whole skylight with a factory electric unit (most reliable, most expensive)
-
-This is the "do it once" answer. A factory electric venting skylight arrives with a **motor, a rain sensor, an insect screen, and a warranty**, all engineered together.
-
-- **VELUX VCE** (electric curb mount) or **VCS** (solar powered) — both include an [integrated rain sensor that closes the unit at the first sign of weather](https://www.solarskylights.com/velux-curb-mounted-electric-skylights/). VCS is attractive here because it's solar-charged and needs **no wiring run to the roof at all**. But remember from §1: **24 × 32 is not a VELUX size** — you'd be rebuilding the curb to 2230 (22½ × 30½ inside) or 2234.
-- **If you want to keep the existing 24 × 32 curb**, go custom: Wasco's [CUSTOMEVMS-EML custom-size solar motorized venting skylight](https://www.iqskylights.com/wasco-customevms-eml-ultraseal-self-flashing-custom-size-solar-motorized-venting-glass-skylight.asp) is ordered to your exact rough opening and ships with the motor, solar panel, battery, rain sensor, and screen pre-installed. Expect a 3–4 week lead time and a signed shop-drawing approval.
-
-**Whichever path: an insect screen is not optional.** An open skylight on a summer night in Philadelphia is an invitation.
+**Design suggestions:** run a thin white or paint-matched trim ring around the grille so it reads as a deliberate fixture rather than a punched hole. Put the grille **off-center, toward the shower end** — it catches steam at the source and looks less like a bullseye. And leave the chains reachable: they'll pass through or beside the panel, so plan a grommeted slot rather than discovering the problem after the panel is cut.
 
 ---
 
-## 6. Control Wiring — Three Tiers
+## 6. Motorizing the Louver
 
-The requirement is simple to state — *fan on ⇒ skylight open, fan off ⇒ skylight closed* — and has a few sharp edges in practice.
+This is where the new information pays off most. You're no longer trying to lift a heavy glazed sash — you're rotating a light metal damper. That's a solved problem with an off-the-shelf part.
 
-### Tier 1 — No smart home, relay logic only
+### The right part: a spring-return damper actuator
+
+A **[Belimo LF24](https://www.belimo.com/us/shop/en_US/p?code=LF24+US)** is a 24VAC/DC fail-safe damper actuator: 35 in-lb torque, 95° of rotation, mounting directly to a **3/8"–1/2" shaft** with a universal clamp, with a graduated position indicator.
+
+The important property is **spring return**. Powered, it drives the damper open and holds it. Cut the power and a spring drives it closed — mechanically, with no electronics involved.
+
+**That is precisely your stated requirement, implemented in one component.** Fan on, louver opens. Fan off, louver closes. No polarity-reversing relay, no timers, no always-on supply, no controller. And it fails closed on a power outage, a blown fuse, or a dead actuator — the safe direction.
+
+Two variants worth knowing:
+- **LF24** — plain on/off, the base part.
+- **[LF24-S](https://www.fwwebb.com/product/Belimo/LF-Damper-Actuator/LF24-SUS/256371)** — adds a built-in SPDT auxiliary switch, adjustable anywhere from 0° to 95°. Worth the small upcharge: it gives you a real electrical signal that the louver actually reached open, which you can wire to an indicator lamp or a smart input. That's the difference between knowing your louver is stuck and finding out in the spring.
+
+**Torque check:** 35 in-lb suits a small, free-moving damper. If your louver is stiff, rusty, or larger than expected, service it first, and if it's still heavy, step up to a Belimo AF24 (same family, ~180 in-lb). **Free the mechanism before you motorize it** — an actuator will happily grind itself to death against a seized pivot.
+
+### The fiddly part: coupling to the linkage
+
+The LF24 clamps to a round shaft. Your hundred-year-old sheet-metal louver may or may not present one.
+
+- **If the chain sprocket rides on a round shaft of 3/8"–1/2"** — ideal. The actuator clamps straight on, and if there's enough shaft length you can leave the sprocket and chains in place for manual override. Note that with a spring-return actuator attached, manual pulls now work against the spring, so the chains become an emergency override rather than everyday operation.
+- **If it's a flat crank arm on a pivot pin** — you'll need a crank-arm/linkage kit. Belimo sells universal crank arm and ball-joint linkage kits for exactly this retrofit case. Bring your photos to a controls supplier ([Kele](https://www.kele.com/product/actuators-and-dampers/spring-return/belimo/lf24), [Jackson Systems](https://jacksonsystems.com/product/belimo-lf24-us-2-position-actuator-spring-return/), or a local HVAC controls house) and let them spec the kit against what you actually have.
+- **If the linkage is hopeless** — fall back position: leave the louver fully manual and put a **motorized damper in the duct run** instead. You lose the automatic louver, but Path B means the fan still works perfectly. This is a legitimate outcome, not a failure.
+
+**Mounting:** the actuator needs a solid bracket inside the metal box, and it's now living in an unconditioned, occasionally damp outdoor enclosure. Mount it as high and as sheltered as the geometry allows, run the low-voltage wiring in with a drip loop, and check it once a year.
+
+---
+
+## 7. Control Wiring
+
+With a spring-return actuator, this is the entire system:
 
 ```
-120V switched hot (fan) ──► coil of a 120VAC DPDT relay
+   fan switch (120V switched hot) ──┬──► inline fan
                                     │
-24V PSU (always powered) ───► DPDT contacts ───► actuator + / −
-                              (relay energized  = OPEN polarity)
-                              (relay at rest    = CLOSE polarity)
+                                    └──► 24VAC transformer ──► Belimo LF24
+                                         (40VA, Class 2)        (spring closes
+                                                                 on loss of power)
 ```
 
-The 24V supply is **always on**, and the fan's switched hot only drives the relay coil. That's what lets the skylight still close when the fan is off — if you powered the actuator from the fan circuit, it would lose power the instant you needed it to close.
+That's it. One transformer, two wires to the actuator. The transformer's primary lands on the fan's switched hot, so the actuator is energized exactly when the fan is.
 
-Two things to get right:
+**Notes:**
+- Use a **Class 2, 40VA 24VAC transformer** — comfortably above the LF24's draw, and Class 2 keeps the low-voltage wiring in easy territory.
+- **The louver takes a moment to open; the fan starts instantly.** Under Path B this is harmless — the fan is ducted to its own wall cap and doesn't care about the louver at all. (Under Path A you'd need a delay-on-make timer; another reason to build Path B.)
+- Put the transformer in a proper junction box in the joist bay, not loose in the shaft.
+- If you fit the **LF24-S**, run its aux switch down to a small indicator LED by the light switch. Cheap, and it tells you at a glance whether the louver is actually opening.
 
-- **Does your actuator cut its own motor at the end of travel?** Most have internal limit switches or stall detection, so holding polarity at the limit is harmless. **Verify this in the manual.** If it doesn't, add an off-delay timer relay so drive power is removed ~60 seconds after each movement, or you'll cook the motor.
-- **The fan starts instantly; the skylight takes 30–60 seconds to open.** Under Path A (§2) that matters a lot. Add a **delay-on-make timer** so the fan waits for the skylight. Under the recommended Path B it's harmless — the fan is ducted and doesn't care.
+### Optional: smart controls
 
-### Tier 2 — Smart, and what I'd actually build
+You don't need them — the requirement is fully met above. But if you already run Home Assistant, a [Shelly Plus 1 or 1PM](https://us.shelly.com/) on the fan circuit gets you, with no change to the wiring above:
 
-Use a **[Shelly 2PM Gen3 in cover mode](https://kb.shelly.cloud/knowledge-base/cover-mode)** to drive the actuator, plus a Shelly on the fan (or just read the fan's switch state), and tie them together in Home Assistant or in a local Shelly script.
+- **Humidity triggering** — fan and louver run on humidity rather than only on the wall switch. This is the upgrade you'd actually notice day to day.
+- **Run-on timer** — hold both for 10 minutes after the shower to finish drying the room.
+- **Cold-weather skip** — below ~35°F, run the fan without opening the louver. Path B makes that possible; the fan is fully independent of the louver.
+- **Failure alerting** — pair with the LF24-S aux switch to alert when the louver doesn't reach open.
 
-Cover mode is purpose-built for exactly this motor pattern — two interlocked outputs, travel-time calibration, position tracking, and a [direction-reverse setting](https://kb.shelly.cloud/knowledge-base/shelly-plus-2-pm-device-smart-control-cover-mode) if it opens when it should close.
-
-**Wiring caveat:** Shelly relay outputs are normally fed from the module's own line input. Switching a *separate* 24V supply requires the potential-free / dry-contact wiring configuration — **check your specific model's manual**, and if it isn't supported, have the Shelly drive an external DPDT relay instead. Alternatively, sidestep the issue entirely by buying a **[120V hardwired skylight motor](https://www.amazon.com/Skylight-Control-Hard-Wired-Adjustable-Skylights/dp/B0DF2QG1MM)** so the Shelly is switching line voltage, which is what it's designed for.
-
-What the smart tier buys you that Tier 1 can't:
-- **Sequencing** — open the skylight, *then* start the fan.
-- **Run-on timer** — hold the skylight open 10 minutes after the fan stops to finish drying the room out.
-- **Humidity trigger** — open and run on humidity, not just on the wall switch. This is the version you'll actually appreciate.
-- **Unconditional close** — a nightly "close no matter what" automation, and a close-on-rain that overrides everything.
-- **Failure visibility** — an alert when the cover doesn't reach its expected position, which is the difference between noticing a stuck skylight and finding out in the spring.
-
-### Tier 3 — Factory skylight + gateway
-
-If you went Path 3 in §5, a VELUX unit pairs to a **KLF 200** interface, which brings it into Home Assistant cleanly. Same automation logic as Tier 2, with far better hardware underneath.
-
-### Rain sensor — mandatory on every tier
-
-If the skylight can open by itself, it must be able to close by itself. Either buy an actuator with the sensor built in, or add a wired one such as the [Koncey 24V rain/wind sensor](https://www.amazon.com/Koncey-Automatic-Electric-Automatically-Windows/dp/B0DF1PKZ8F). Wire it so that **rain forces close and overrides the fan interlock**, not the other way around. Under Path B this is a non-event — the fan keeps working with the skylight shut. Under Path A, rain-close means the fan should also shut down, which is another argument for Path B.
+The Shelly switches line voltage on the fan circuit, which is what it's designed for — none of the 24V dry-contact complications v1.0 had to work around.
 
 ---
 
-## 7. Weather, Winter, and Condensation
+## 8. One Thing to Check: The Glass
 
-- **Insulate the duct.** Any duct running through the unconditioned zone between ceiling and roof must be insulated, or it condenses internally and drips back down through your fan. This is explicitly required where the duct passes through unconditioned space, and it's the single most common cause of "my bathroom fan is leaking."
-- **Slope the duct toward the roof cap** so any condensate that does form runs outward, not back into the fan.
-- **Expect condensation on the skylight glazing itself** in winter regardless of what you do. If the existing unit is single-pane — very common in older row-house skylights — this will be dramatic. A modern double- or triple-glazed replacement essentially eliminates it, which is a real argument for Path 3 beyond just the automation.
-- **Winter behavior:** consider a Home Assistant condition that skips the skylight-open step below some outdoor temperature (say 35°F) and just runs the fan. You lose the stack-vent boost and keep the heat. Trivial in Tier 2, impossible in Tier 1.
-- **Air-seal the clear panel.** A leaky panel turns the light well into a chimney that bleeds conditioned air 24/7, fan or no fan.
+While you're up there, look closely at that frosted panel. **If it's wired glass** — obscure glass with a steel mesh embedded in it, very common in this vintage of rooftop sheet-metal work — it's worth knowing that **wired glass fails the modern safety-glazing test and isn't permitted in overhead applications** except within fire-rated assemblies. Under current code, [sloped and overhead glazing](https://up.codes/s/sloped-glazing-and-skylights) has to be laminated glass, or glass with a retention film, or be protected by a screen below it, so that broken glass stays put instead of falling on whoever's below.
 
----
+The counterintuitive part: the embedded wire makes wired glass *weaker* than plain annealed glass, not stronger, and when it breaks it leaves shards hanging on wire rather than falling clear.
 
-## 8. Install Sequence
+I'm flagging it, not sounding an alarm. It's existing construction, it's been there for decades, nobody's requiring you to change it, and it's not a reason to postpone this project. But two things follow:
 
-1. **Identify and inspect** (§1). Photograph the nameplate and the operator. Get the curb dimensions, inside and out.
-2. **Exercise the existing mechanism.** Open and close it by hand a dozen times. Note any binding, grit, or slop. Service the hinges and operator now, before anything gets motorized.
-3. **Decide Path A / B / C** (§2). This locks in everything downstream.
-4. **Run power to the well** — a switched leg for the fan and a constant leg for the 24V supply and actuator. Put the PSU in a proper junction box, not loose in the joist bay.
-5. **Cut and flash the roof penetration** for the duct and set the roof cap. This is the one step where hiring a roofer is usually the right call in a row house — flat and low-slope roofs are unforgiving, and a bad flashing detail on a Philly rowhome roof is an expensive lesson.
-6. **Mount the inline fan** in the adjacent joist bay. Suspend it on the included brackets; don't hard-mount it to framing if you can avoid it — the isolation is worth it acoustically.
-7. **Duct it up**, insulated, sloped to the cap.
-8. **Mount the actuator** in the well. Attach to the curb liner, bracket to the sash, set the stroke, and cycle it **by hand power first** at low duty to confirm the geometry doesn't bind at either end of travel.
-9. **Wire the interlock** (§6). Test with the panel still off so you can see everything move.
-10. **Build and fit the clear panel** (§4) last, with the grille cut to match the duct drop.
-11. **Commission it:** run a hot shower with the door closed and watch. Mirror should clear in a few minutes. Check the duct for condensation after the first cold night. Trigger the rain sensor with a wet finger and confirm the skylight closes.
+1. **Your clear polycarbonate panel is doing incidental safety duty.** It sits below the well and would catch anything that came down. That's a genuine (if accidental) benefit of the design — one more argument for ¼" over 0.093".
+2. **If you ever do replace the glazing**, that's the moment to go to laminated. Not a today problem.
 
 ---
 
-## 9. Things That Will Bite You
+## 9. Condensation and Winter
+
+- **Insulate the duct.** Any duct in the unconditioned zone between ceiling and wall cap must be insulated or it condenses internally and drips back down through the fan. This is the single most common cause of "my bathroom fan is leaking."
+- **Slope the duct toward the wall cap** so any condensate that does form runs outward.
+- **Expect condensation on the underside of the fixed glass** in winter regardless. It's single-pane glass on a metal box; that's just what it does. Path B means you're no longer *adding* shower steam to it, which helps a lot compared with Path A.
+- **Air-seal the clear panel.** A leaky panel turns the light well into a chimney that bleeds conditioned air 24/7, fan or no fan. Between the panel gasket and a closed louver, the shaft should be reasonably sealed when nothing's running.
+- **Winter louver behavior:** with Path B you can simply choose not to open the louver when it's cold (see §7, smart controls) and lose nothing but the boost.
+
+---
+
+## 10. Install Sequence
+
+1. **Get up there and photograph everything** (§1) — especially the louver's shaft or linkage arm, and the free wall area on the non-louvered faces. Measure the shaft diameter.
+2. **Exercise the louver by hand.** Open and close it a dozen times with the chains. Free up, clean, and lubricate the pivots. **Do this before ordering an actuator** — it determines the torque you need and whether the LF24 is enough.
+3. **Take your photos to a controls supplier** and have them spec the actuator plus whatever crank-arm or linkage kit your louver needs. This is the one part worth a human's eyes on.
+4. **Cut and fit the wall cap** in the metal box, on a face away from the louver. Hole saw or step drill, deburr, gasket, sealant, screw the flange, seal the perimeter.
+5. **Run power to the well** — a switched leg for the fan and the transformer.
+6. **Mount the inline fan** in the adjacent joist bay on its suspension brackets; don't hard-mount to framing if you can avoid it — the isolation is worth it acoustically.
+7. **Duct it up**, insulated, sloped toward the cap.
+8. **Mount the actuator** on the louver shaft. Set the rotation limits, then **power-cycle it a dozen times with the panel still off** so you can watch the full travel and confirm nothing binds at either end.
+9. **Wire the transformer** to the fan's switched hot. Verify with a multimeter before closing anything up.
+10. **Build and fit the clear panel** last, with the grille cut to match the duct drop and a grommeted slot for the chains.
+11. **Commission it:** run a hot shower with the door closed. Mirror should clear in a few minutes. Kill the breaker mid-cycle and confirm the louver springs shut. Check the duct for condensation after the first cold night.
+
+---
+
+## 11. Things That Will Bite You
 
 | Symptom | Likely cause |
 |---|---|
-| Skylight opens but fan barely moves air | No makeup air — undercut the bathroom door |
+| Louver opens but fan barely moves air | No makeup air — undercut the bathroom door |
+| Exhaust smell or steam coming back in the louver | Wall cap sited on the same face as the louver — short-circuit recirculation |
 | Water dripping from the ceiling grille | Uninsulated duct condensing, or duct sloped back toward the fan |
-| Actuator buzzes and won't complete travel | Underspecced force rating, or a binding hinge/operator you didn't service first |
-| Skylight opens when it should close | Reversed polarity — flip the leads, or use the Shelly cover-mode reverse setting |
+| Actuator buzzes and won't reach full open | Under-torqued for a stiff louver, or a pivot you didn't free up first |
+| Louver doesn't close on power-off | Spring return defeated by a binding linkage — the spring only has so much authority |
 | Clear panel bows or cracks near screws | Screw holes not oversized for thermal movement, or sheet too thin for the span |
-| Panel fogs on the inside | Panel not sealed to the ceiling; humid air migrating around its edges into the well |
-| Actuator motor eventually burns out | Drive polarity held continuously at the travel limit on a unit with no internal cutoff |
-| Everything works, room still steams up | Fan undersized for the added light-well volume — this space is bigger than it looks |
+| Panel fogs on the inside | Panel not sealed to the ceiling; humid air migrating around the edges into the well |
+| Louver frozen shut after a snow | Packed snow in the blades. Path B means the fan doesn't care — that's the point |
+| Everything works, room still steams up | Fan undersized for the added light-well volume — the space is bigger than it looks |
 
 ---
 
-## 10. Code Notes
+## 12. Code Notes
 
-- **[IRC M1507.2](https://www.jaspector.com/codes/irc-2018/ch15-exhaust-systems/bathroom-exhaust-fan-outdoor-termination-irc-2018/)**: bathroom exhaust must discharge directly outdoors; it may not discharge into an attic, crawl space, or other interior area. A light well counts as interior. This is the whole reason for Path B.
-- **50 CFM** is the standard intermittent-exhaust minimum for a bathroom (20 CFM if run continuously).
-- **Ducts through unconditioned space must be insulated** to prevent condensation.
-- **Philadelphia L&I**: cutting a new roof penetration and running new branch circuits generally means permits. Check with [Philadelphia Licenses & Inspections](https://www.phila.gov/departments/department-of-licenses-and-inspections/) before you start, especially if your block is in a historic district — row-house roof work sometimes carries extra review.
-- **Party walls**: in a row house your roof penetration needs to respect the party-wall setback. Don't site the roof cap near the property line without checking.
+- **[IRC M1507.2](https://www.jaspector.com/codes/irc-2018/ch15-exhaust-systems/bathroom-exhaust-fan-outdoor-termination-irc-2018/)**: bathroom exhaust must discharge directly outdoors, never into an attic, crawl space, or other interior area. A light well and a closed metal box count as interior. This is the entire argument for Path B.
+- **50 CFM** intermittent (or 20 CFM continuous) is the standard bathroom minimum.
+- **Ducts in unconditioned space must be insulated** against condensation.
+- **[Overhead glazing](https://up.codes/s/sloped-glazing-and-skylights)** must be laminated, filmed, or screened — see §8. Applies to replacement, not to leaving existing construction alone.
+- **Philadelphia L&I**: new branch circuits generally mean a permit. Check with [Licenses & Inspections](https://www.phila.gov/departments/department-of-licenses-and-inspections/), particularly if your block is in a historic district — visible rooftop changes can draw extra review, though a small wall cap on an existing ventilator is about as low-profile as it gets. **Notably, Path B involves no new roof penetration**, which is the part that usually triggers roofing scope and a contractor.
 
 ---
 
 ## Summary Recommendation
 
-Build **Path B, Tier 2, §5 Path 1**:
+- **Keep the ventilator.** It's well suited to this job — weather-protected vertical louver, fixed glazing with no leak path, and a free above-roof wall to terminate through. Nothing here argues for replacing it.
+- **Path B:** remote inline fan in an adjacent joist bay, insulated duct up through the shaft, terminating at a **wall cap cut into a non-louvered face of the metal box**. No roof work.
+- **Belimo LF24-S spring-return damper actuator** on the louver shaft, powered from a 24VAC transformer on the fan's switched hot. Fan on → louver opens. Fan off → spring closes it. That's the whole control system, and it fails closed.
+- **¼" UV-coated polycarbonate panel** in a removable wood frame, small off-center grille, grommeted slot for the chains.
+- **Keep the manual chains working** for summer stack ventilation and emergency override.
 
-- Keep the existing skylight; add a 24V chain actuator alongside the working manual pull-chain.
-- Remote inline fan in an adjacent joist bay, ducted through an insulated 6"→4" run to its own roof cap.
-- Clear ¼" UV-coated polycarbonate panel in a removable wood frame, small off-center inlet grille.
-- Shelly 2PM in cover mode + Home Assistant: skylight opens, then fan starts; fan stops, skylight holds 10 minutes, then closes; rain and cold-weather overrides.
-
-That gets you exactly the behavior you described, keeps the daylight, keeps a manual fallback, and — critically — the bathroom still ventilates correctly on the day the actuator dies.
+Estimated parts cost: **$550–850**, and — because the wall-cap termination replaces the roof penetration — plausibly **no contractor at all** if you're comfortable with a hole saw, a duct run, and a 120V circuit.
 
 See `skylight_vent_fan_purchase_list.md` for parts and links.
