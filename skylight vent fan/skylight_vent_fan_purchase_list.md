@@ -1,8 +1,10 @@
 # Skylight-Linked Bathroom Vent Fan — Purchase List
 
-**Version:** 2.0
+**Version:** 2.1
 **Date:** August 2026
 **Companion Document:** `skylight_vent_fan_guide.md`
+
+> **v2.1 changelog** — Added **§3b, louver position sensing**: keep the louver manual and add a switch that reports whether it's open. It's the recommended starting point (guide §12) — about a sixth the cost of motorizing, no linkage coupling to solve, and as a fan interlock it makes the no-ductwork Path A defensible. §3 (actuator) is now presented as the later upgrade rather than the default. Budget table reworked around three build tiers.
 
 > **v2.0 changelog** — Rebuilt for the actual hardware: a fixed-glass roof ventilator with a chain-operated side louver. **Removed:** rain sensor, roof cap and flashing, chain actuators, DPDT relay logic, timer relays, skylight replacement options. **Added:** spring-return damper actuator, 24VAC transformer, wall cap. Budget drops roughly $250–400 and the roofer line item disappears.
 
@@ -16,7 +18,8 @@
 
 1. [Ventilation — the core](#1-ventilation--the-core)
 2. [The clear ceiling panel](#2-the-clear-ceiling-panel)
-3. [Louver automation](#3-louver-automation)
+3. [Louver automation — Option 1: motorize it](#3-louver-automation--option-1-motorize-it)
+3b. [Louver position sensing — Option 2: sense it](#3b-louver-position-sensing--option-2-sense-it) ⭐ *start here*
 4. [Optional smart controls](#4-optional-smart-controls)
 5. [Consumables & hardware](#5-consumables--hardware)
 6. [Tools](#6-tools)
@@ -63,9 +66,11 @@
 
 ---
 
-## 3. Louver automation
+## 3. Louver automation — Option 1: motorize it
 
 The whole control system is two parts. **Do not order the actuator until you've measured the louver shaft and freed the mechanism by hand** — see guide §6.
+
+> **Consider §3b first.** Guide §12 recommends starting with the sensor: ~$40 instead of $200–330, no linkage coupling to solve, and nothing stranded if you upgrade to the actuator later.
 
 | Item | Why | Approx. | Link |
 |---|---|---|---|
@@ -79,6 +84,38 @@ The whole control system is two parts. **Do not order the actuator until you've 
 | **Penetrox / anti-seize + light machine oil** | For freeing and lubricating hundred-year-old louver pivots before motorizing | $10–20 | Home Depot |
 
 **Not needed anymore:** rain sensor (~$30–60), 24V chain actuators (~$70–200), 24V DC power supply, DPDT relay + socket, delay-on-make timer, off-delay timer. The spring-return actuator makes every one of those redundant.
+
+---
+
+## 3b. Louver position sensing — Option 2: sense it
+
+**The recommended starting point** (guide §7 and §12). Keep the louver manual; add a switch that reports whether it's open. Under Path B it drives reminders and left-open alerts; under Path A it's a hard fan interlock that makes the no-ductwork build defensible.
+
+**Buy one sensor from the first group.** Go **wired, not wireless** — battery chemistry does badly in a cold rooftop box, and RF struggles to escape a soldered sheet-metal enclosure.
+
+| Item | Why | Approx. | Link |
+|---|---|---|---|
+| **⭐ IP67 sealed roller-lever limit switch, SPDT snap action** | **My pick.** Mechanical and unambiguous, immune to the surrounding steel, no field to distort. SPDT gives you an NO contact for the interlock and an NC for an indicator. Position it to trip at *full* travel | $8–25 | [Amazon (SJZBIN IP67)](https://www.amazon.com/SJZBIN-Switch-Waterproof-Sealed-Roller/dp/B0CHYC695J) · [Amazon (heavy-duty metal housing)](https://www.amazon.com/Explosion-Industrial-Waterproof-Automation-Equipment/dp/B0GYW44K8Y) |
+| **Seco-Larm SM-226L-3Q wide-gap magnetic contact** | No contact to wear. **IP66 epoxy-sealed, armored leads, 2¾" gap, 12–24 VDC** — built for steel overhead doors, so it behaves on ferrous metal where an ordinary reed switch won't. NO and NC in one unit | $20–35 | [Seco-Larm](https://www.seco-larm.com/product/sm-226l-3q/) |
+| **Seco-Larm SM-4601-L3Q industrial wide-gap contact** | 3" gap, rugged aluminum housing, IP54, 3-wire open/closed loop. Bigger gap tolerance if your louver's travel is sloppy | $30–50 | [Seco-Larm](https://www.seco-larm.com/product/sm-4601-l3q/) · [Amazon](https://www.amazon.com/Seco-Larm-SM-4601-L3Q-Industrial-Wide-Gap-Operation/dp/B0C5NY6GXY) |
+| **Konnected heavy-duty wired magnetic sensor** | Same idea, hobbyist-friendly packaging. Normally open, closes when the magnet is within ~1" | $15–25 | [Konnected](https://konnected.io/products/garage-door-or-gate-heavy-duty-wired-magnetic-contact-sensor) |
+| ~~Battery Zigbee/Z-Wave door sensor~~ | **Avoid** — cold kills the battery, metal box kills the radio | — | — |
+
+**Plus, depending on how you use the signal:**
+
+| Item | Why | Approx. | Link |
+|---|---|---|---|
+| **18/2 thermostat wire** (18/4 if using both SPDT contacts) | Sensor on the roof, electronics indoors. Run it down the shaft | $12–20 | Home Depot |
+| **Shelly Plus i4 DC** | Four dry-contact / 12–24V DC inputs, WiFi, native Home Assistant integration. Covers the louver sensor with three inputs to spare | $25–35 | [Shelly USA](https://us.shelly.com/products/shelly-plus-i4) · [Absolute Automation](https://www.absoluteautomation.com/products/shelly-plus-i4-wifi-4-digital-inputs) |
+| **24V pilot lamp / indicator LED** | The no-software version — a light by the switch telling you the louver is open | $10–20 | Amazon / Home Depot |
+| **24VAC or 24VDC transformer, Class 2** | Only if you're driving a pilot lamp or interlock relay without a Shelly | $20–35 | Home Depot / HVAC supply |
+| **⚠ 24V relay, contacts rated for the fan load** | **Required on Path A.** Do not switch 120V fan current through a magnetic reed contact — they're rated for small signal loads. Let the sensor drive the relay and the relay carry the fan | $15–30 | Amazon / any electrical supply |
+| **Manual bypass switch** *(Path A)* | For the night the sensor fails and you want a shower. Label it; don't make it convenient enough to become the default | $10–20 | Home Depot |
+| **Bracket stock + fasteners** | Small angle bracket to position the switch against the louver arm | $10–20 | Home Depot |
+
+> **Wire it fail-safe.** Use a **normally-open contact that closes only at full louver travel**. Then a broken wire, corroded terminal, dead switch, or dropped magnet all block the fan rather than permitting it. Never wire it so a failed sensor lets the fan run — that reproduces the exact problem the sensor exists to prevent.
+
+> **Nothing here is stranded by a later §3 upgrade.** Add the actuator and the sensor becomes its position confirmation — or drop it and use the LF24-S's built-in aux switch instead.
 
 ---
 
@@ -148,27 +185,40 @@ Gets you: humidity triggering, a 10-minute run-on after the shower, a cold-weath
 
 ## 8. Budget summary
 
+### By component
+
 | Scope | Range |
 |---|---|
 | Ventilation core (§1) | $400 – $550 |
 | Clear panel (§2) | $120 – $200 |
-| Louver automation (§3) | $200 – $330 |
+| Louver **motorization** (§3) | $200 – $330 |
+| Louver **sensing** (§3b) | $35 – $75 |
 | Consumables (§5) | $130 – $240 |
-| **Recommended build, parts total** | **$550 – $850** |
+
+### By build tier
+
+| Build | Parts total |
+|---|---|
+| **Path A + §3b sensor interlock** — no duct, no wall cap. Cheapest complete build | **$300 – $450** |
+| **⭐ Path B + §3b sensor** — recommended starting point | **$400 – $600** |
+| **Path B + §3 actuator** — the original ask, fully automatic | **$550 – $850** |
+| *Later upgrade from §3b to §3* | +$200 – $330 |
 | *Add optional smart controls (§4)* | +$40 – $200 |
 | *Add a stiffer actuator + linkage kit if the louver needs it* | +$150 – $250 |
 | *Add an electrician for the branch circuit, if you'd rather not* | +$300 – $600 |
 
-**No roofer line item.** That's the single biggest change from v1.0 — the wall cap in the metal box replaces a roof penetration, which was carrying $400–1,000 of contractor scope and most of the project's risk.
+**No roofer line item in any tier.** That's the single biggest change from v1.0 — the wall cap in the metal box replaces a roof penetration, which was carrying $400–1,000 of contractor scope and most of the project's risk.
+
+**The §3b tier isn't a downgrade, it's a staging decision.** Guide §12 lays out the reasoning: it costs a sixth as much, installs in an hour, removes the project's one genuinely uncertain component, and tells you over a season whether manual chain operation actually bothers you — with nothing wasted if you later decide it does.
 
 ---
 
 ## 9. Ordering sequence
 
 1. **Nothing until you've been up there.** Photograph the louver shaft or crank arm, measure the shaft diameter with calipers, identify a free wall face for the cap, and check the box's metal condition.
-2. **Free the louver mechanism by hand.** Clean and lubricate the pivots, work it through its full travel. This determines whether 35 in-lb is enough and is genuinely the step that decides whether this project is easy or annoying.
-3. **Take your photos to Kele, Jackson Systems, or an F.W. Webb counter** and have them spec the LF24-S plus any linkage kit. This is the one item worth a human's eyes on rather than a guess from a web page.
-4. **Order the fan, duct, and wall cap** (§1) — longest lead on the physical work.
-5. **Order the actuator, linkage, and transformer** (§3) once step 3 settles the spec.
-6. **Order the polycarbonate last**, after the grille location, duct drop, and chain path are physically established.
-7. **Smart controls (§4) whenever** — easiest thing to change your mind about, and entirely additive to the wiring in §7 of the guide.
+2. **Free the louver mechanism by hand.** Clean and lubricate the pivots, work it through its full travel. This is the step that decides the whole project: if it moves sweetly, manual operation is a non-issue and **§3b is clearly enough**. If it's stiff and awkward even after servicing, that argues for motorizing — and also warns that 35 in-lb may not be enough.
+3. **Order the fan, duct, and wall cap** (§1) — longest lead on the physical work, and needed under every tier.
+4. **Order the sensor and wire** (§3b). Cheap, fast, and it doesn't depend on anything you haven't already measured.
+5. **Order the polycarbonate**, after the grille location, duct drop, and chain path are physically established.
+6. **Smart controls (§4) whenever** — easiest thing to change your mind about, and entirely additive.
+7. **Only if and when you decide to motorize:** take your photos to Kele, Jackson Systems, or an F.W. Webb counter and have them spec the LF24-S plus any linkage kit (§3). This is the one item worth a human's eyes on rather than a guess from a web page — and the one you can defer indefinitely without stranding anything you've already bought.
