@@ -1,0 +1,73 @@
+## Homelab dashboard stack: Homepage + Authelia forward-auth + Redis
+##
+## Standalone for now — merge these services/networks into your main
+## *arr-stack compose file when ready. Assumes NPM already exists and
+## terminates TLS on the VPS; this stack only needs to be reachable over
+## the WireGuard tunnel from NPM.
+##
+## Before starting:
+##   1. cp .env.example .env   and fill in the values
+##   2. Generate secrets (see README.md) into ./secrets/
+##   3. Edit config/authelia/configuration.yml and users_database.yml
+##   4. Edit config/homepage/*.yaml for your actual services
+
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: ${DASHBOARD_DOMAIN}
+    networks:
+      - homelab
+
+  authelia:
+    image: authelia/authelia:latest
+    container_name: authelia
+    restart: unless-stopped
+    ports:
+      - "9091:9091"
+    volumes:
+      - ./config/authelia:/config
+    environment:
+      TZ: ${TZ:-UTC}
+      AUTHELIA_JWT_SECRET_FILE: /run/secrets/authelia_jwt_secret
+      AUTHELIA_SESSION_SECRET_FILE: /run/secrets/authelia_session_secret
+      AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: /run/secrets/authelia_storage_encryption_key
+    secrets:
+      - authelia_jwt_secret
+      - authelia_session_secret
+      - authelia_storage_encryption_key
+    depends_on:
+      - redis
+    networks:
+      - homelab
+
+  redis:
+    image: redis:7-alpine
+    container_name: authelia-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - homelab
+
+secrets:
+  authelia_jwt_secret:
+    file: ./secrets/jwt_secret.txt
+  authelia_session_secret:
+    file: ./secrets/session_secret.txt
+  authelia_storage_encryption_key:
+    file: ./secrets/storage_encryption_key.txt
+
+volumes:
+  redis-data:
+
+networks:
+  homelab:
+    name: homelab
