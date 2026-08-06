@@ -1,6 +1,6 @@
 # Open-Source Camera Drone — Complete Build Guide
 
-**Version:** 1.5
+**Version:** 1.6
 **Date:** August 2025
 **Build Time:** 8–12 hours (excluding 3D print time)
 **Skill Level:** Intermediate (basic soldering and assembly required)
@@ -106,6 +106,8 @@ This build uses two independent 915MHz links: **ExpressLRS (ELRS)** for low-late
 4. Verify telemetry link in QGroundControl once paired (see §6).
 
 > ⚠️ Since both ELRS and LoRa share the 915MHz band, use different channel/frequency-hopping settings for each to avoid interference — refer to the ExpressLRS and MicoAir documentation for coexistence guidance.
+
+> 📷 The LR900-F's telemetry link has far more range than any FPV video link (§10) will ever reach. If you want a rough visual check-in beyond FPV range rather than just numeric telemetry, see `drone_lora_still_image_uplink.md` — an experimental, DIY-only approach for sending periodic low-res stills over this same link.
 
 ---
 
@@ -253,6 +255,6 @@ Combined, these three changes stack: a lighter payload, a more efficient motor/p
 
 ---
 
-**Document Version:** 1.5
+**Document Version:** 1.6
 **Last Updated:** August 2025
-**Companion Documents:** `drone_purchase_list.md`, `drone_frame_merge_guide.md`, `drone_kit_alternatives.md`, `drone_requirements_summary.md`
+**Companion Documents:** `drone_purchase_list.md`, `drone_frame_merge_guide.md`, `drone_kit_alternatives.md`, `drone_lora_still_image_uplink.md`, `drone_requirements_summary.md`

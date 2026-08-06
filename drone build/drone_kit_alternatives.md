@@ -3,7 +3,7 @@
 **Version:** 1.0
 **Date:** August 2025
 **Applies to:** `drone_purchase_list.md` §1 (Flight Controller & Core Electronics)
-**Companion Documents:** `drone_build_guide.md`, `drone_purchase_list.md`, `drone_frame_merge_guide.md`
+**Companion Documents:** `drone_build_guide.md`, `drone_purchase_list.md`, `drone_frame_merge_guide.md`, `drone_lora_still_image_uplink.md`
 
 ---
 
@@ -69,4 +69,4 @@ This is a savings estimate for that specific slice of the parts list only — fr
 
 **Document Version:** 1.0
 **Last Updated:** August 2025
-**Companion Documents:** `drone_build_guide.md`, `drone_purchase_list.md`, `drone_frame_merge_guide.md`
+**Companion Documents:** `drone_build_guide.md`, `drone_purchase_list.md`, `drone_frame_merge_guide.md`, `drone_lora_still_image_uplink.md`
