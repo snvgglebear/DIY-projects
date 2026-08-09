@@ -43,3 +43,55 @@ These support the entire printer frame while also enclosing the electronics — 
 - [ ] Decide: keep TFT35 or rely on BTT Pi's own touchscreen output via KlipperScreen
 - [ ] Confirm frame dimensions/extrusion sizing against chosen base enclosure design
 - [ ] Check DIN rail mount compatibility for Octopus V1.1 (ZeroG configurator should handle this)
+
+---
+
+## 4. Toolhead Printed Parts Checklist (E3D V6 + LGX Lite, EVA 2.4 / MPP Kit)
+
+ZeroG's Mercury 1.1 toolhead is built on the **EVA 2.4** modular platform. The toolhead is assembled from separate modules (Drive, Hotend, Probe), each with its own printed-parts list. Below is the full official BOM for your combo — cross-check this against what's in your MPP kit box to spot what's missing.
+
+Source: EVA 2.4 official docs — https://2.eva-3d.page/
+
+### Drive module — LGX Lite (CoreXY, MGN12)
+Source: https://2.eva-3d.page/drives/lgx_lite/
+
+| Qty | Printed Part |
+|---|---|
+| 1 | top_mgn12 |
+| 1 | universal_face |
+| 2 | face_belt_grabber |
+| 1 | bottom_mgn12_short_duct |
+| 1 | TriHorn Duct (Default) |
+| 1 | back_corexy |
+| 2 | tension_slider_9mm_belt_M5 |
+| 1 | cable_holder |
+| 1 | universal_cable_mount |
+
+### Hotend module — E3D V6
+Source: https://2.eva-3d.page/hotends/v6/
+
+| Qty | Printed Part |
+|---|---|
+| 1 | v6_face |
+| 1 | v6_face_clamp |
+| 1 | v6_support |
+
+### Probe module — BL-Touch (if applicable)
+Source: https://2.eva-3d.page/addons/probes/bl_touch/
+*(Your kit ships with both BLTouch and inductive mounts per the MPP listing — you only need one)*
+
+| Qty | Printed Part |
+|---|---|
+| 1 | bl_touch_mount |
+| 1 | bl_touch_mount_alt (alternate orientation — pick one) |
+
+### Probe module — Inductive (if applicable)
+Check: https://2.eva-3d.page/addons/probes/inductive/ for the equivalent inductive mount part name/count.
+
+### Total unique toolhead printed parts: ~12–13 pieces
+(top_mgn12, universal_face, face_belt_grabber ×2, bottom_mgn12_short_duct, TriHorn duct, back_corexy, tension_slider ×2, cable_holder, universal_cable_mount, v6_face, v6_face_clamp, v6_support, + 1 probe mount)
+
+### Notes
+- **Non-printed hardware also required per BOM:** 4010 fan (hotend), 5015 fan (part cooling), M3 screws in various lengths (8/10/12/20/25/35mm), M3 hex nuts, M5×45mm screws + nyloc nuts (tension sliders), PTFE tube (sum of drive + hotend BOM lengths — do not cut into two pieces).
+- The **TriHorn duct** and **cable management parts** (cable_holder, universal_cable_mount) are easy to overlook since they're not "core" front/hotend pieces — check these first if something feels missing.
+- If you're running a remote toolhead board (BTT EBB36/EBB42, etc.) instead of wiring straight to the Octopus, that mount is **not part of the standard EVA BOM** — it's a community addon and would need to be sourced separately (see prior search results for community EBB36/EBB42 LGX Lite mounts).
