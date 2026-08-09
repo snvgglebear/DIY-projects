@@ -3,12 +3,54 @@
 Research notes for housing a BTT Octopus V1.1 + BTT Pi V1.2 + TFT35-E3 V3.0.1 on an
 Ender 5 Plus converted to CoreXY with the ZeroG Mercury One.1 kit.
 
+Companion doc: [`enclosure_research_summary.md`](./enclosure_research_summary.md) — a shorter
+research summary that surfaced the official ZeroG enclosure below. Two of its classifications are
+corrected here; see [Corrections to the summary doc](#corrections-to-the-summary-doc).
+
 > **Verification status:** all model links below were found through search and the titles/URLs
-> are real, but the hosting sites (Printables, Thingiverse, Cults3D, docs.zerog.one) are blocked
-> from this environment, so I could not open each page and confirm dimensions from the STL
-> descriptions myself. Details attributed to a model come from its listing text. **Measure
-> against the numbers in [Hardware constraints](#hardware-constraints) before printing 20+ hours
-> of panels.**
+> are real, but most hosting sites (Printables, Thingiverse, Cults3D, docs.zerog.one, Thangs) are
+> blocked from this environment, so I could not open each page and confirm dimensions from the STL
+> descriptions myself. Details attributed to a model come from its listing text. The one exception
+> is GitHub, which is reachable — the `syph3rd/ZeroG-Enclosure` details below were read directly
+> from the repo. **Measure against the numbers in [Hardware constraints](#hardware-constraints)
+> before printing 20+ hours of panels.**
+
+---
+
+## Start here: the official ZeroG Electronics Enclosure
+
+- Overview: <https://docs.zerog.one/manual/build/electronics_enclosure>
+- Printed files + configurator: <https://docs.zerog.one/manual/build/electronics_enclosure/printed_files>
+
+ZeroG publishes a first-party electronics enclosure for Mercury builds with a **configurator** that
+generates a zip of exactly the STLs your board combination needs — rather than a generic box you
+adapt. Files are CC BY-NC-SA 4.0. It is maintained by the ZeroG team alongside the Mercury One.1
+kit itself, which makes it the only option here that tracks the conversion as it changes.
+
+**This should be your first stop**, for three reasons specific to your parts list:
+
+1. It is built around the same board classes you own — Octopus-family mainboards and a BTT Pi host,
+   with DIN rail mounting as a first-class option rather than a community bolt-on.
+2. It is designed against the Mercury One.1 geometry, so the cable path to the top gantry and the
+   bed's travel at Z-max are already accounted for. Every community model below required you to
+   check those yourself.
+3. Configurator output means no remixing to fit a V1.1 instead of a Pro, which is the main risk in
+   [B1](#b1-ender-5-plus-electronics-enclosure-and-display-for-raspberry-pi-and-octopus-pro).
+
+**What to confirm when you open the configurator** (I could not — docs.zerog.one is egress-blocked
+here):
+
+- That it offers an **Ender 5 Plus** frame option, not just the Pro or the Nebula frame kit. This is
+  the single most important check; the Pro/Plus base footprints differ.
+- That **Octopus V1.1** is selectable (as opposed to Octopus Pro / Max EZ only).
+- That **BTT Pi V1.2** appears as its own option rather than "Raspberry Pi" — the boards are not
+  mechanically interchangeable. See [Hardware constraints](#hardware-constraints).
+- Whether the enclosure hangs under the frame or sits beside it, which determines whether it also
+  answers your "base that holds the printer up" requirement or only the electronics half of it.
+
+If all four check out, print it and skip the rest of this document. The sections below are the
+fallback if the configurator does not cover the E5+ frame, plus the parts the ZeroG enclosure does
+**not** solve — chamber enclosure and TFT35 mounting.
 
 ---
 
@@ -80,9 +122,39 @@ scaling or a remix of the corner pieces. Worth reading for the layout idea even 
 
 <https://www.printables.com/model/896979-zero-g-mercury-one1-for-ender-5-pro-bottom-panel-e>
 
-The only model found that is purpose-built for a Mercury One.1 conversion. Caveat: it's for the
-**Ender 5 Pro**, not the Plus. Useful as a reference for how others solved the Mercury cable routing,
-but the panel dimensions will not transfer to the E5+ frame without rework.
+The only community model found that is purpose-built for a Mercury One.1 conversion. Caveat: it's
+for the **Ender 5 Pro**, not the Plus. Useful as a reference for how others solved the Mercury cable
+routing, but the panel dimensions will not transfer to the E5+ frame without rework.
+
+---
+
+## Not electronics enclosures: chamber enclosures
+
+Both of these come up in enclosure searches and both are worth having — but they enclose the
+*printer*, not the boards. Neither supports the frame or houses electronics.
+
+### syph3rd/ZeroG-Enclosure
+
+<https://github.com/syph3rd/ZeroG-Enclosure>
+
+Chamber enclosure for ZeroG Mercury One builds on the **Ender 5 Plus and Pro** — the one option in
+this document that explicitly covers your frame. Ships CAD sources, STLs, acrylic panel
+specifications and images; GPL-2.0; ~40 commits of history. The repo does not state which control
+boards it supports, because it doesn't need to — it's a chamber, not a board box.
+
+*(These details were read from the repo directly; GitHub is reachable from this environment.)*
+
+### Ender 5 Plus Mercury One.1 Enclosure Top-Hat
+
+<https://www.printables.com/model/1099998-ender-5-plus-mercury-one1-enclosure-top-hat>
+
+A printed top-hat that encloses the build chamber of an E5+ Mercury One.1. Sits **on top of** the
+frame.
+
+**How these interact with your electronics choice:** if you build either one, keep the boards in a
+base or side box *outside* the heated chamber. That's already the recommendation below, but a
+chamber makes it non-negotiable — and it raises the ambient temperature the electronics bay sees, so
+size the bay fans for a chamber build even if you add the chamber later.
 
 ---
 
@@ -161,12 +233,38 @@ of those rather than a Raspberry Pi bracket.
 
 ## Screen: TFT35-E3 V3.0.1
 
+**Decide whether you're keeping it before you design anything around it.** The ZeroG enclosure
+designs generally assume the host SBC drives a KlipperScreen panel; they don't reserve a spot for a
+separate TFT35. So the TFT35 is an add-on mount in any of these builds, and it may be redundant.
+
+The two paths:
+
+| | TFT35-E3 on EXP1/EXP2 | KlipperScreen on the BTT Pi |
+|---|---|---|
+| Wiring | Ribbon cables to the Octopus | HDMI + USB touch (or DSI) from the Pi |
+| UI under Klipper | 12864 emulation — knob-and-menu, no touch | Full touch UI, macros, mesh view |
+| Extra hardware | None, you own it | A small HDMI/DSI touchscreen |
+| Effort | Plug in, done | Panel + mount + config |
+
+Note the BTT Pi V1.2 has no integrated display — KlipperScreen needs a panel attached to it. So
+"use KlipperScreen instead" means buying a screen, not just reconfiguring. If you'd rather not, the
+TFT35 in 12864 mode is a perfectly serviceable local control panel and costs you nothing.
+
+**My take:** keep the TFT35 on EXP1/EXP2 for now. It's free, it works, and Mainsail on a phone or
+tablet covers everything the 12864 UI is bad at. Revisit KlipperScreen only if you find yourself
+standing at the printer wanting touch.
+
 Mount it on the frame, not on the enclosure — you want it at eye level and away from the bay's heat.
 
 - Ender 5 Plus external mount for the TFT35 V3:
   <https://www.printables.com/model/750018-ender-5-plus-btt-tft35-v3-external-screen-mount>
 - TFT35-E3 case for the Ender 5 Plus:
   <https://www.printables.com/model/242410-tft35-e3-case-for-ender-5-plus>
+- Magnetic TFT35-E3 mount (Kazi Toad, Thangs) — mounts independently of the enclosure, so it
+  survives changing your mind about the bay:
+  <https://thangs.com/designer/Kazi%20Toad/3d-model/Magnetic%20screen%20mount%20for%20BigTreeTech%20BTT%20TFT35-E3-408340>
+- Reference build pairing a custom TFT35 SPI mount with the standard ZeroG enclosure:
+  <https://www.3docity.com.au/blogs/3dprinting/mercury-zerog-ender-5-mod-build-info-klipper-slicer-profiles>
 
 **Firmware caveat worth knowing before you plan the wiring:** under Klipper the TFT35-E3 works in
 **12864 emulation mode** out of the box (wired to the Octopus's EXP1/EXP2 headers). Its native touch
@@ -181,11 +279,19 @@ misbehave). Plan on EXP1/EXP2 + KlipperScreen or Mainsail on a tablet if you wan
 
 ## Recommended build
 
+**First: open the [ZeroG configurator](https://docs.zerog.one/manual/build/electronics_enclosure/printed_files)
+and run the four checks above.** If it supports the E5+ frame with an Octopus V1.1 and a BTT Pi
+V1.2, that's the build — first-party, maintained, geometry already matched to Mercury. Everything
+below is the fallback.
+
+If the configurator doesn't cover the Plus frame:
+
 1. **Shell:** A1 — the Big Dog skirting/lower enclosure (70 mm lift). It's the "base that holds up
    the frame" concept you were after, it's E5+-specific, and it's recently maintained.
 2. **Interior:** a 35 mm DIN rail across the bay, Octopus on the fan-shroud clip, BTT Pi on the
    Voron BTT-Pi clip, PSU left in its stock frame position for now (moving 40.5 mm of PSU into a
-   70 mm bay eats most of your air gap).
+   70 mm bay eats most of your air gap). This mirrors how the ZeroG enclosure does it, so parts and
+   layout transfer if you switch later.
 3. **Cooling:** one 60 mm intake at the front skirt behind a printed grille, exhaust vents at the
    opposite rear corner so air crosses the Octopus drivers. Filter the intake — this bay sits at
    floor level.
@@ -213,8 +319,56 @@ under a Mercury build runs warm. PETG or ABS/ASA for anything touching or enclos
 
 ---
 
+## Open questions / next steps
+
+- [ ] Run the ZeroG configurator and confirm the four checks: E5+ frame option, Octopus V1.1,
+      BTT Pi V1.2, and whether the enclosure hangs under the frame or beside it
+- [ ] Decide TFT35 on EXP1/EXP2 vs buying a panel for KlipperScreen (see the table above —
+      the BTT Pi has no built-in display, so KlipperScreen means new hardware)
+- [ ] Measure the frame extrusion profiles before ordering T-nuts; sources disagree on the E5+ mix
+- [ ] Measure bed-to-base clearance at Z-max before committing to any lift height
+- [ ] Confirm DIN rail mount compatibility for the Octopus V1.1 specifically — the community clips
+      listed above are mostly drawn for the Pro, and the two share a hole pattern but not
+      connector positions
+- [ ] Decide whether a chamber enclosure is in scope; if so, size the electronics bay fans for the
+      higher ambient now rather than reprinting grilles later
+
+---
+
+## Corrections to the summary doc
+
+Two items in [`enclosure_research_summary.md`](./enclosure_research_summary.md) are filed under
+"Base style enclosures (double as frame support/feet)" but are actually **chamber** enclosures —
+they enclose the print volume and do not support the frame or house boards:
+
+- `syph3rd/ZeroG-Enclosure` — confirmed chamber enclosure with acrylic panels, read directly from
+  the GitHub repo (Ender 5 Plus and Pro, GPL-2.0)
+- Ender 5 Plus Mercury One.1 Enclosure Top-Hat — sits on top of the frame
+
+Both are covered in [Not electronics enclosures: chamber enclosures](#not-electronics-enclosures-chamber-enclosures).
+They're still useful for this build, just for a different job.
+
+One terminology note: the summary describes the BTT Pi as "the main controller" running
+"its own touchscreen output." In a Klipper setup the BTT Pi is the **host** (running Klipper,
+Moonraker, Mainsail) and the Octopus is the **MCU** doing motion. The Pi has no built-in display —
+KlipperScreen requires an HDMI or DSI panel attached to it. This matters for the keep-or-drop-the-
+TFT35 decision, since dropping it means buying a screen.
+
+The summary's main contribution — the official ZeroG configurator — is now the lead recommendation
+of this document and was missed entirely in the first pass.
+
+---
+
 ## Sources
 
+- [Electronics Enclosure — ZeroG Documentation](https://docs.zerog.one/manual/build/electronics_enclosure)
+- [Electronics Enclosure printed files + configurator — ZeroG Documentation](https://docs.zerog.one/manual/build/electronics_enclosure/printed_files)
+- [Mercury One.1 printed files — ZeroG Documentation](https://docs.zerog.one/manual/build/mercury_eva/printed_files)
+- [MERCURY ONE.1 instruction manual (PDF) — ZeroG](https://docs.zerog.one/assets/mercury_one_1_instruction_18-02-2024.pdf)
+- [syph3rd/ZeroG-Enclosure (chamber enclosure, E5+/Pro) — GitHub](https://github.com/syph3rd/ZeroG-Enclosure)
+- [Magnetic screen mount for BTT TFT35-E3 — Thangs](https://thangs.com/designer/Kazi%20Toad/3d-model/Magnetic%20screen%20mount%20for%20BigTreeTech%20BTT%20TFT35-E3-408340)
+- [Mercury ZeroG (Ender 5 MOD) build info / Klipper / slicer profiles — 3docity](https://www.3docity.com.au/blogs/3dprinting/mercury-zerog-ender-5-mod-build-info-klipper-slicer-profiles)
+- [Zero G Mercury One.1 build collection — Printables](https://www.printables.com/@Invertbob_55337/collections/1701249)
 - [Ender 5 Plus Skirting and Lower Enclosure (Base Case) — Printables](https://www.printables.com/model/557066-ender-5-plus-skirting-and-lower-enclosure-base-cas)
 - [Ender 5 Plus Electronics Enclosure and Display for Raspberry Pi and Octopus Pro — Printables](https://www.printables.com/model/781678-ender-5-plus-electronics-enclosure-and-display-for)
 - [Zero G Mercury One.1 for Ender 5 Pro Bottom Panel Electronics Enclosure — Printables](https://www.printables.com/model/896979-zero-g-mercury-one1-for-ender-5-pro-bottom-panel-e)
