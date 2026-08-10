@@ -3,7 +3,7 @@
 **Version:** 1.0
 **Date:** August 2025
 **Applies to:** Frame Option A from `drone_purchase_list.md` §2 (virk3D's Lumenier QAV-PRO Whoop 5" replica, Printables)
-**Companion Documents:** `drone_build_guide.md`, `drone_purchase_list.md`
+**Companion Documents:** `drone_build_guide.md`, `drone_purchase_list.md`, `drone_kit_alternatives.md`, `drone_lora_still_image_uplink.md`
 
 ---
 
@@ -60,4 +60,4 @@ Merging parts changes the frame's engineered joint behavior — the original spl
 
 **Document Version:** 1.0
 **Last Updated:** August 2025
-**Companion Documents:** `drone_build_guide.md`, `drone_purchase_list.md`
+**Companion Documents:** `drone_build_guide.md`, `drone_purchase_list.md`, `drone_kit_alternatives.md`, `drone_lora_still_image_uplink.md`
