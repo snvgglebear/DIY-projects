@@ -154,6 +154,37 @@ reference diagrams are p152–153.
 
 ---
 
+## Assembly instructions: where to look
+
+**There is no official EVA 2.4 assembly manual.** The site's navigation is Introduction, Features
+and Roadmap, Parts Explained, Printing, Hotends, Drives, Addons, STEP Files and Licence, Community
+Contributions, Queen Shroud — no assembly section anywhere. Each module page carries exactly three
+blocks: Description, Bill of Materials, Links. No steps, no exploded views, no video.
+
+ZeroG's manual p149 shows a link captioned *"EVA 2.4 Docs & Assembly Guide"*, but its actual target
+is `docs.zerog.one/manual/build/mercury_eva/printed_files#eva-24-toolhead-configurator` — their own
+configurator anchor. Following it lands back at the file downloads. It is a documentation dead end,
+not something you've failed to find.
+
+What to use instead, roughly in order of usefulness:
+
+| Source | What it gives | Caveat |
+|---|---|---|
+| **OnShape CAD assembly** — linked from each EVA module page's Links block. LGX Lite: [`cad.onshape.com/documents/afc780380bd2317241ddf83e/…`](https://cad.onshape.com/documents/afc780380bd2317241ddf83e/w/e822a01920872e9f27d38958/e/37c09e63f33fc6f60a845257) | The live model — rotate, section, see exactly where each fastener lands and which faces mate | EVA's own warning: bleeding-edge version, may differ from released STLs |
+| **Rat Rig Dozuki guides** — `ratrig.dozuki.com`, "07. EVA Assembly" (guide 117), "08. EVA 2 Carriage: BMG + E3D V6" (guide 72) | The de facto illustrated manual; Rat Rig ships EVA on the V-Core 3 | Written for BMG + V6 on a V-Core — drive-specific steps differ, carriage stack-up is identical |
+| **Older EVA docs** — `pkucmus.github.io/EVA`, per-combination *assemblies* pages (`hemera-mgn12corexy`, `bowden-mgn12corexyv6`, `bmg-mgn12v6corexy`) | Assembly walkthroughs for the general stack-up | Earlier EVA generation |
+| **[E34M1 docs](https://jon-harper.github.io/E34M1/)** | Ships a real assembly guide, and it's for this exact printer | EVA 3, not 2.4 — orientation only unless you switch platforms |
+| **ZeroG Discord** — linked from their docs' introduction | Fastest route for Mercury-specific questions | — |
+
+### The gap none of these close
+
+**No EVA guide covers `a_Eva_Backplate` or `a_Eva_FrontPlate`** — those are ZeroG's own Mercury
+parts, not upstream EVA, and the readme in `MercuryOne/STLs/Toolhead/` is still marked "Soon™". For
+those plates specifically, the OnShape model, the Discord, or a community Mercury build video is
+all there is.
+
+---
+
 ## Parts checklist
 
 From the research summary, sourced from the official EVA 2.4 docs. Cross-check against what's in
@@ -251,6 +282,9 @@ complete, finishing that build is the cheaper move; revisit E34M1 at your next t
 - [ZeroGDesign/MercuryOne — official Mercury STL repo](https://github.com/ZeroGDesign/MercuryOne/tree/main/STLs/Toolhead)
 - [EVA-3D/eva-2 — built EVA 2.4 docs site, per-module STLs](https://github.com/EVA-3D/eva-2)
 - [EVA 2.4 Parts Explained](https://2.eva-3d.page/parts_explained/)
+- [LGX Lite live CAD assembly — OnShape](https://cad.onshape.com/documents/afc780380bd2317241ddf83e/w/e822a01920872e9f27d38958/e/37c09e63f33fc6f60a845257)
+- [Rat Rig EVA assembly guides — Dozuki](https://ratrig.dozuki.com/Guide/07.+EVA+Assembly/117)
+- [Older EVA docs with per-combination assembly pages](https://pkucmus.github.io/EVA/)
 - [Mercury One.1 build instructions — ZeroG Documentation](https://docs.zerog.one/manual/build/mercury_eva/build_instruction)
 - [ZeroG docs source (printed_files page read from here)](https://github.com/ZeroGDesign/docs/blob/gh-pages/docs/pages/manual/build/mercury_one_1/printed_files.md)
 - [E34M1 — EVA 3 for Mercury One.1 (docs)](https://jon-harper.github.io/E34M1/) · [repo](https://github.com/jon-harper/E34M1)
