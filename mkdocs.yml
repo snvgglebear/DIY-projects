@@ -67,7 +67,9 @@ nav:
   - Drone build:
       - Build guide: drone-build/drone_build_guide.md
       - Purchase list: drone-build/drone_purchase_list.md
+      - Kit alternatives: drone-build/drone_kit_alternatives.md
       - Frame merge guide (Onshape): drone-build/drone_frame_merge_guide.md
+      - LoRa still-image uplink: drone-build/drone_lora_still_image_uplink.md
   - Homelab:
       - Dashboard stack: homelab/README.md
       - Dashboard options: homelab/dashboard_options.md

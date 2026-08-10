@@ -22,7 +22,9 @@ comms and a smartphone ground station.
 
 - [Build guide](drone-build/drone_build_guide.md) — full assembly, wiring, configuration and first-flight checklist
 - [Purchase list](drone-build/drone_purchase_list.md) — parts, costs and sourcing
+- [Kit alternatives](drone-build/drone_kit_alternatives.md) — hybrid kit-vs-parts approach for the core electronics
 - [Frame merge guide (Onshape)](drone-build/drone_frame_merge_guide.md) — merging a multi-part frame design into fewer large prints
+- [LoRa still-image uplink](drone-build/drone_lora_still_image_uplink.md) — experimental low-bandwidth image downlink
 
 ### Homelab
 
