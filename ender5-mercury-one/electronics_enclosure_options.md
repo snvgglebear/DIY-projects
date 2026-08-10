@@ -20,37 +20,57 @@ corrected here; see [Corrections to the summary doc](#corrections-to-the-summary
 ## Start here: the official ZeroG Electronics Enclosure
 
 - Overview: <https://docs.zerog.one/manual/build/electronics_enclosure>
+- Introduction: <https://docs.zerog.one/manual/build/electronics_enclosure/introduction>
 - Printed files + configurator: <https://docs.zerog.one/manual/build/electronics_enclosure/printed_files>
+- **STL source repo:** <https://github.com/ZeroGDesign/ElectronicEnclosure>
+- Docs source repo: <https://github.com/ZeroGDesign/docs>
 
-ZeroG publishes a first-party electronics enclosure for Mercury builds with a **configurator** that
-generates a zip of exactly the STLs your board combination needs — rather than a generic box you
-adapt. Files are CC BY-NC-SA 4.0. It is maintained by the ZeroG team alongside the Mercury One.1
-kit itself, which makes it the only option here that tracks the conversion as it changes.
+ZeroG publishes a first-party electronics enclosure for Mercury and Nebula builds with a
+**configurator** that generates a zip of exactly the STLs your build needs, rather than a generic
+box you adapt. Files are CC BY-NC-SA 4.0, maintained by the ZeroG team alongside the Mercury One.1
+kit — the only option here that tracks the conversion as it changes.
 
-**This should be your first stop**, for three reasons specific to your parts list:
+**It is a skirt-and-feet design, which is exactly the "base that holds the printer up and encloses
+the electronics" you were describing.** The configurator's printer selection automatically pulls in
+the skirt files, and there's a separate feet option you select alongside it.
 
-1. It is built around the same board classes you own — Octopus-family mainboards and a BTT Pi host,
-   with DIN rail mounting as a first-class option rather than a community bolt-on.
-2. It is designed against the Mercury One.1 geometry, so the cable path to the top gantry and the
-   bed's travel at Z-max are already accounted for. Every community model below required you to
-   check those yourself.
-3. Configurator output means no remixing to fit a V1.1 instead of a Pro, which is the main risk in
-   [B1](#b1-ender-5-plus-electronics-enclosure-and-display-for-raspberry-pi-and-octopus-pro).
+### Verified against ZeroG's own repos
 
-**What to confirm when you open the configurator** (I could not — docs.zerog.one is egress-blocked
-here):
+docs.zerog.one is egress-blocked from this environment, but **GitHub is reachable**, so the
+questions this section previously left open were answered by reading the source repos directly:
 
-- That it offers an **Ender 5 Plus** frame option, not just the Pro or the Nebula frame kit. This is
-  the single most important check; the Pro/Plus base footprints differ.
-- That **Octopus V1.1** is selectable (as opposed to Octopus Pro / Max EZ only).
-- That **BTT Pi V1.2** appears as its own option rather than "Raspberry Pi" — the boards are not
-  mechanically interchangeable. See [Hardware constraints](#hardware-constraints).
-- Whether the enclosure hangs under the frame or sits beside it, which determines whether it also
-  answers your "base that holds the printer up" requirement or only the electronics half of it.
+| Question | Answer | Evidence |
+|---|---|---|
+| Ender 5 Plus frame supported? | **Yes** | `STLs/Plus/` holds `Skirt/`, `Stock_Z_Deck_Panel/`, `Hydra_Deck_Panel/`; `STLs/Pro/` is the Ender 5 Pro equivalent |
+| Octopus mount included? | **Yes** | `STLs/DIN_Mounts/MCU/Octopus-M3_heatset_X_2.stl` (alongside Spider, Manta M8P, SKR Mini) |
+| DIN rail a first-class option? | **Yes** | `STLs/DIN_Mounts/` is split into `MCU/`, `PI/`, `PSU/`, `Misc/`, `Plus/`, `Universal/` |
+| BTT Pi V1.2 mount included? | **No — generic Pi only** | `STLs/DIN_Mounts/PI/` has only `Pi-M2_5_Self_Tapping_X_2.stl` and `Pi-M3_Heatset_X_2.stl` |
+| Mounts under the frame or beside it? | **Under — skirt + feet** | Configurator auto-includes skirt files with printer selection; separate feet option |
 
-If all four check out, print it and skip the rest of this document. The sections below are the
-fallback if the configurator does not cover the E5+ frame, plus the parts the ZeroG enclosure does
-**not** solve — chamber enclosure and TFT35 mounting.
+Configurator options, per the docs source: printer size, feet type, IEC inlet (including a
+**switched** variant with the power switch built in), primary PSU, secondary PSU ("mostly used for
+the Raspberry"), motherboard — where the docs note *"We recommend the Spider 2.3 or Octopus"* — and
+Raspberry mount. The option dropdowns are populated by JavaScript at page load, so the exact model
+lists aren't visible in the source; the directory names above are the reliable evidence.
+
+### The one gap: your BTT Pi
+
+The official kit ships **generic Raspberry Pi DIN mounts, not a BTT-Pi-specific one**. Your BTT Pi
+V1.2 shares the Pi outline but only 3 of its 4 mounting holes line up (see
+[Hardware constraints](#hardware-constraints)), so expect to either run it on three screws or
+substitute one of the community Voron BTT Pi DIN mounts from
+[Approach C](#approach-c--din-rail-bay-inside-whatever-shell-you-pick). Since the official enclosure
+is DIN-based, those clips drop straight in — same rail, no shell modification.
+
+That's the only mismatch between your parts list and the official kit. **Print it, substitute the
+Pi mount, and skip the rest of this document.** The sections below are the fallback if you'd rather
+not run the ZeroG design, plus the two things it doesn't cover — chamber enclosure and TFT35
+mounting.
+
+Note also that Octopus V1.1 vs Octopus Pro doesn't matter for the DIN plate: both share the
+150 × 90 mm hole pattern, and a backplate doesn't care where the connectors sit. That's the risk
+in [B1](#b1-ender-5-plus-electronics-enclosure-and-display-for-raspberry-pi-and-octopus-pro), where
+the cutouts *do* care — but not here.
 
 ---
 
@@ -279,12 +299,14 @@ misbehave). Plan on EXP1/EXP2 + KlipperScreen or Mainsail on a tablet if you wan
 
 ## Recommended build
 
-**First: open the [ZeroG configurator](https://docs.zerog.one/manual/build/electronics_enclosure/printed_files)
-and run the four checks above.** If it supports the E5+ frame with an Octopus V1.1 and a BTT Pi
-V1.2, that's the build — first-party, maintained, geometry already matched to Mercury. Everything
-below is the fallback.
+**Build the ZeroG enclosure.** The checks came back green: Plus-frame skirt and deck panels, an
+Octopus DIN mount, a DIN-based interior, and a skirt-and-feet design that carries the printer. Run
+the [configurator](https://docs.zerog.one/manual/build/electronics_enclosure/printed_files), select
+the Plus, add the feet, pick the switched IEC inlet if you want a proper power switch, and
+substitute a [Voron BTT Pi DIN clip](#approach-c--din-rail-bay-inside-whatever-shell-you-pick) for
+the generic Pi mount. That's the whole build.
 
-If the configurator doesn't cover the Plus frame:
+Everything below is the fallback if you'd rather not run the ZeroG design:
 
 1. **Shell:** A1 — the Big Dog skirting/lower enclosure (70 mm lift). It's the "base that holds up
    the frame" concept you were after, it's E5+-specific, and it's recently maintained.
@@ -321,15 +343,20 @@ under a Mercury build runs warm. PETG or ABS/ASA for anything touching or enclos
 
 ## Open questions / next steps
 
-- [ ] Run the ZeroG configurator and confirm the four checks: E5+ frame option, Octopus V1.1,
-      BTT Pi V1.2, and whether the enclosure hangs under the frame or beside it
+- [x] ~~Confirm the ZeroG configurator covers the E5+ frame, the Octopus and the BTT Pi~~ —
+      answered above: Plus skirt and Octopus DIN mount both ship; the Pi mount is generic and
+      needs substituting
+- [ ] Pick the PSU options in the configurator: primary PSU model, and whether you want the
+      secondary PSU (it's there to power the host board) or a 24 V→5 V buck instead
+- [ ] Decide on the switched IEC inlet — worth it, and it settles the mains-entry question in
+      [Safety](#safety)
 - [ ] Decide TFT35 on EXP1/EXP2 vs buying a panel for KlipperScreen (see the table above —
       the BTT Pi has no built-in display, so KlipperScreen means new hardware)
 - [ ] Measure the frame extrusion profiles before ordering T-nuts; sources disagree on the E5+ mix
 - [ ] Measure bed-to-base clearance at Z-max before committing to any lift height
-- [ ] Confirm DIN rail mount compatibility for the Octopus V1.1 specifically — the community clips
-      listed above are mostly drawn for the Pro, and the two share a hole pattern but not
-      connector positions
+- [x] ~~Confirm DIN rail mount compatibility for the Octopus V1.1~~ — ZeroG ships
+      `Octopus-M3_heatset_X_2.stl`; a DIN backplate only needs the shared 150 × 90 mm hole
+      pattern, so V1.1 and Pro are interchangeable here
 - [ ] Decide whether a chamber enclosure is in scope; if so, size the electronics bay fans for the
       higher ambient now rather than reprinting grilles later
 
@@ -355,14 +382,27 @@ KlipperScreen requires an HDMI or DSI panel attached to it. This matters for the
 TFT35 decision, since dropping it means buying a screen.
 
 The summary's main contribution — the official ZeroG configurator — is now the lead recommendation
-of this document and was missed entirely in the first pass.
+of this document and was missed entirely in the first pass. Its §2 framing was also right in a way
+the correction above understates: the official enclosure genuinely *is* a base-style design with a
+skirt and feet, which is what the summary was reaching for even though the two models it listed
+under that heading aren't.
+
+The summary's §4 toolhead parts checklist is a different subject from enclosures and has its own
+worked-up companion: [`toolhead_printed_parts.md`](./toolhead_printed_parts.md). One correction
+carries over there — ZeroG has its own EVA 2.4 configurator, which is a better source than the
+generic EVA BOM for this printer.
 
 ---
 
 ## Sources
 
 - [Electronics Enclosure — ZeroG Documentation](https://docs.zerog.one/manual/build/electronics_enclosure)
+- [Electronics Enclosure introduction — ZeroG Documentation](https://docs.zerog.one/manual/build/electronics_enclosure/introduction)
 - [Electronics Enclosure printed files + configurator — ZeroG Documentation](https://docs.zerog.one/manual/build/electronics_enclosure/printed_files)
+- [ZeroGDesign/ElectronicEnclosure — official STL repo (Plus skirt, DIN mounts read from here)](https://github.com/ZeroGDesign/ElectronicEnclosure)
+- [ZeroGDesign/docs — documentation source (configurator options read from here)](https://github.com/ZeroGDesign/docs)
+- [zockerlukas2004/Ender-5-Plus_Enclosure-MercuryOne — chamber enclosure mod](https://github.com/zockerlukas2004/Ender-5-Plus_Enclosure-MercuryOne)
+- [dragonsmith/zerog-top-hat — top hat for E5+ Mercury One.1](https://github.com/dragonsmith/zerog-top-hat)
 - [Mercury One.1 printed files — ZeroG Documentation](https://docs.zerog.one/manual/build/mercury_eva/printed_files)
 - [MERCURY ONE.1 instruction manual (PDF) — ZeroG](https://docs.zerog.one/assets/mercury_one_1_instruction_18-02-2024.pdf)
 - [syph3rd/ZeroG-Enclosure (chamber enclosure, E5+/Pro) — GitHub](https://github.com/syph3rd/ZeroG-Enclosure)
