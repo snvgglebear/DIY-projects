@@ -1,0 +1,6 @@
+# Docs site toolchain. Pinned so CI builds are reproducible.
+# Build locally with:
+#   python3 -m venv venv && ./venv/bin/pip install -r requirements-docs.txt
+#   ./venv/bin/mkdocs serve
+mkdocs-material==9.5.44
+mkdocs-same-dir==0.1.3

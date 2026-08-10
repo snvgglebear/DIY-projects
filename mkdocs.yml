@@ -1,0 +1,90 @@
+site_name: DIY Projects
+site_description: Documentation and research for DIY projects — 3D printing, drone builds, homelab.
+site_url: https://snvgglebear.github.io/DIY-projects/
+docs_dir: .
+
+repo_url: https://github.com/snvgglebear/DIY-projects
+repo_name: snvgglebear/DIY-projects
+edit_uri: edit/main/
+
+# The same-dir plugin lets docs live where they already are in the repo
+# instead of being moved under docs/. Relative links between a doc and the
+# files it documents (e.g. homelab/README.md -> ./docker-compose.yml) keep
+# working both on GitHub and on the built site.
+plugins:
+  - same-dir
+  - search
+
+theme:
+  name: material
+  features:
+    - navigation.sections    # group headings in the left sidebar
+    - navigation.expand      # sections open by default
+    - navigation.top
+    - navigation.tracking
+    - toc.follow             # right sidebar TOC follows scroll position
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 3
+      # GitHub-compatible heading anchors, so hand-written TOC links like
+      # "#testing--calibration" resolve the same on GitHub and on the site.
+      slugify: !!python/object/apply:pymdownx.slugs.slugify {kwds: {case: lower}}
+  - tables
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Home: README.md
+  - Ender 5 Plus / Mercury One.1:
+      - Electronics enclosure options: ender5-mercury-one/electronics_enclosure_options.md
+      - Toolhead printed parts: ender5-mercury-one/toolhead_printed_parts.md
+      - Enclosure research summary: ender5-mercury-one/enclosure_research_summary.md
+  - Drone build:
+      - Build guide: drone-build/drone_build_guide.md
+      - Purchase list: drone-build/drone_purchase_list.md
+      - Kit alternatives: drone-build/drone_kit_alternatives.md
+      - Frame merge guide (Onshape): drone-build/drone_frame_merge_guide.md
+      - LoRa still-image uplink: drone-build/drone_lora_still_image_uplink.md
+  - Homelab:
+      - Dashboard stack: homelab/README.md
+      - Dashboard options: homelab/dashboard_options.md
+
+# Everything left in the tree gets copied into the published site, so keep
+# config and secrets out of it. docker-compose.yml stays in: dashboard_options.md
+# links to it, and it holds only references to secret files, not secrets.
+exclude_docs: |
+  .github/
+  homelab/config/
+  homelab/secrets/
+  homelab/.env.example
+  requirements-docs.txt
+  venv/
+  .venv/
+
+not_in_nav: |
+  homelab/docker-compose.yml
