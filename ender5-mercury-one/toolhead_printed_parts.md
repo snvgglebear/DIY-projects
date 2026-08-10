@@ -9,8 +9,9 @@ Companion docs: [`electronics_enclosure_options.md`](./electronics_enclosure_opt
 > **Verification status:** `2.eva-3d.page` is blocked by this environment's egress proxy, so the
 > per-part BOM below could not be checked against the official EVA pages and is carried over from
 > the research summary. GitHub *is* reachable, so everything about ZeroG's own configurator and the
-> E34M1 alternative was read from source repos. Treat the part names as a checklist to verify, not
-> as confirmed truth.
+> E34M1 alternative was read from source repos, the build manual was read from the PDF, and the
+> hole geometry in [How the toolhead mounts](#how-the-toolhead-mounts-to-the-x-rail) was measured
+> directly from the STLs. Treat the part names as a checklist to verify, not as confirmed truth.
 
 ---
 
@@ -38,6 +39,118 @@ Two configurators live on that page — don't mix them up:
 
 **Frame size is not a configurator option.** Ender 5 (Pro) and Ender 5 Plus are handled as separate
 downloadable STEP files on that page — check you're pulling the **Plus** set.
+
+---
+
+## Where the STL files actually live
+
+Neither configurator covers everything, and the docs pages that *explain* parts don't host them.
+Three distinct sources, and knowing which is which saves a lot of hunting:
+
+| Source | Holds | Use it for |
+|---|---|---|
+| [`ZeroGDesign/MercuryOne/STLs/Toolhead/`](https://github.com/ZeroGDesign/MercuryOne/tree/main/STLs/Toolhead) | `Extruders/`, `Hotends/`, `Probes/`, `Fan_Ducts/`, `Universal/` | **The best checklist for this printer** — ZeroG's own Mercury-correct parts |
+| EVA module pages, e.g. `2.eva-3d.page/drives/lgx_lite/stls/<part>.stl` | Per-page STLs for that module | Addons and anything ZeroG doesn't ship |
+| [`ZeroGDesign/docs/.../assets/stl/eva2_4`](https://github.com/ZeroGDesign/docs/tree/gh-pages/docs/assets/stl/eva2_4) | ZeroG's mirror of the EVA 2.4 set | Manual download instead of the configurator |
+
+**Parts Explained has no download links** — it is conceptual only. On EVA's site each page carries
+the STLs for the parts *it* varies: the **drive page** holds the whole carriage set (top, bottom,
+back, universal face, duct, tension sliders, cable parts), the **hotend page** holds just the three
+adapter pieces, and addons live on their own pages.
+
+### Two parts that fall through the cracks
+
+Neither is a configurator option, so both can be missing from a kit with nothing obviously wrong:
+
+- **Back/front plates** — `Universal/a_Eva_Backplate.stl` and `a_Eva_FrontPlate.stl` in the
+  MercuryOne repo. ZeroG uses these *instead of* stock EVA's `back_corexy` and `universal_face`.
+  The same folder holds `Belt_clamp_x2.stl` (the belt grabbers), `Eva_RearCableArm.stl`, and
+  `a_X_Limit_Stop_Block.stl`.
+- **Hotend fan shroud** — not in the Mercury repo at all; `Hotends/` has only `v6_face`,
+  `v6_face_clamp`, `v6_support`. The shroud is an EVA **addon**:
+  `2.eva-3d.page/addons/shrouds/stls/v6_shroud.stl`
+  ([mirror](https://github.com/EVA-3D/eva-2/tree/master/addons/shrouds/stls)). Variants there
+  include `shroud_adxl.stl` with an ADXL345 mount built in — worth taking if input shaping is
+  coming later.
+
+Layer-cooling duct alternates (TriHorn Default / High Narrow / UHF / Safe) are likewise on an addon
+page, though ZeroG ships its own `Fan_Ducts/EVA2_4_Trihorn_2-6-narrow.stl` and `-wide.stl` — prefer
+those on the ZeroG plates.
+
+> The `a_X_Limit_Stop_Block.stl` is not optional. ZeroG's manual (p149): *"Your toolhead should
+> include a mechanism to trigger the X axis endstop, often called a stop block."*
+
+---
+
+## How the toolhead mounts to the X rail
+
+**The top part bolts to the MGN12H carriage.** For this build that's `Lgx_Lite_Top.stl` (stock EVA
+calls it `top_mgn12`). Not the back plate — the back varies by *motion system*, the top is the part
+"specified by the preferred drive **and MGN carriage type and size**," which is why the rail size is
+in its filename.
+
+Measured from `Lgx_Lite_Top.stl` — four holes in the MGN12H bolt pattern:
+
+| | |
+|---|---|
+| Hole centres | `(-10, -2)` `(10, -2)` `(-10, 18)` `(10, 18)` mm |
+| Spacing | **20.0 × 20.0 mm**, 28.3 mm diagonal (= 20√2) |
+| Bore | 3.2–3.3 mm — M3 clearance |
+| Counterbore | 6.0 mm, for M3 socket-head cap screws |
+
+`a_Eva_Backplate.stl` has no matching pattern (its holes sit at 30 / 34 / 48 / 58 / 62 mm), which
+confirms it isn't the part meeting the rail.
+
+Resulting stack:
+
+```
+MGN12H carriage
+  └── Lgx_Lite_Top          ← 4× M3 into the carriage's own threads
+        ├── LGX Lite extruder on top
+        ├── front plate → v6_face + v6_face_clamp + v6_support
+        ├── back plate behind → belt attachment
+        └── bottom + duct underneath
+```
+
+Belts never touch the carriage. They terminate on the toolhead: belt end into the **belt catch**
+ribs-facing-out (top-left and bottom-left), a printed **belt grabber** pressed over both, one
+**M3×8 mm bolt** each — finger-tighten, align the belt ends, then tighten fully. So belt tension
+loads those four carriage screws.
+
+### Heat-set inserts
+
+Measured hole profiles through `Lgx_Lite_Top.stl`:
+
+| Feature | Profile | Verdict |
+|---|---|---|
+| 4× carriage holes | 6.0 mm counterbore, then 3.2–3.3 mm through | **No insert** — screws thread into the steel carriage |
+| 2× long cross holes | 6.18 mm recess, then 3.5 mm clearance ~26.5 mm deep | **No insert** — clearance for a through-screw |
+| 1× blind bore | 4.15 mm dia × 7 mm deep, does not break through | **One M3 heat-set insert** |
+
+So the part takes **one** insert, and it is *not* part of the carriage mount. The bolts holding the
+toolhead to the rail pass through clean and bite the carriage's own M3 threads.
+
+Caveat: this scan covered bores aligned to the three principal axes, so an angled or very small
+pocket could have been missed. Check the physical part before heating anything.
+
+### Assembly gotchas
+
+- **ZeroG's manual does not cover toolhead assembly.** Page 149: *"You'll need to assemble your
+  toolhead of choice until the belts are ready for installation. Once that's done, we'll pick up
+  from there!"* It resumes at belt installation. EVA's own guide is the authority for the bolt-down.
+- **Screw length differs between the two hole pairs.** The `y = -2` pair has ~11 mm of counterbore
+  above ~4 mm of clearance; the `y = 18` pair sits in much thinner material. Measure per pair rather
+  than buying one length for all four, and don't bottom out in the carriage block.
+- **Proud heat-set inserts cause gaps.** The manual raises this for the X joints (p125): an insert
+  standing above the surface holds the printed part off the MGN12H carriage. Same hazard here — if
+  the top won't sit flat, fix the insert rather than torquing it down.
+- **Mount the toolhead before threading belts,** then put long M3 screws through the free holes
+  either side of the carriage to hold the gantry square while routing — threading pulls hard on the
+  toolhead (p156).
+
+The full build manual is worth having open —
+[187-page PDF](https://docs.zerog.one/assets/mercury_one_1_instruction_18-02-2024.pdf); belt routing
+reference diagrams are p152–153.
 
 ---
 
@@ -134,6 +247,10 @@ complete, finishing that build is the cheaper move; revisit E34M1 at your next t
 
 - [EVA 2.4.2 documentation](https://2.eva-3d.page/) — [LGX Lite drive](https://2.eva-3d.page/drives/lgx_lite/) · [V6 hotend](https://2.eva-3d.page/hotends/v6/) · [BL-Touch probe](https://2.eva-3d.page/addons/probes/bl_touch/) · [inductive probe](https://2.eva-3d.page/addons/probes/inductive/)
 - [Mercury One.1 printed files + both configurators — ZeroG Documentation](https://docs.zerog.one/manual/build/mercury_eva/printed_files)
+- [MERCURY ONE.1 build manual, 187-page PDF — ZeroG](https://docs.zerog.one/assets/mercury_one_1_instruction_18-02-2024.pdf) — toolhead handoff p149, belt prep p155–156, X joint insert warning p125
+- [ZeroGDesign/MercuryOne — official Mercury STL repo](https://github.com/ZeroGDesign/MercuryOne/tree/main/STLs/Toolhead)
+- [EVA-3D/eva-2 — built EVA 2.4 docs site, per-module STLs](https://github.com/EVA-3D/eva-2)
+- [EVA 2.4 Parts Explained](https://2.eva-3d.page/parts_explained/)
 - [Mercury One.1 build instructions — ZeroG Documentation](https://docs.zerog.one/manual/build/mercury_eva/build_instruction)
 - [ZeroG docs source (printed_files page read from here)](https://github.com/ZeroGDesign/docs/blob/gh-pages/docs/pages/manual/build/mercury_one_1/printed_files.md)
 - [E34M1 — EVA 3 for Mercury One.1 (docs)](https://jon-harper.github.io/E34M1/) · [repo](https://github.com/jon-harper/E34M1)
