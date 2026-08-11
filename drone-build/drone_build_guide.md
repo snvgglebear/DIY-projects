@@ -1,7 +1,7 @@
 # Open-Source Camera Drone — Complete Build Guide
 
-**Version:** 1.6
-**Date:** August 2025
+**Version:** 1.7
+**Date:** August 2026
 **Build Time:** 8–12 hours (excluding 3D print time)
 **Skill Level:** Intermediate (basic soldering and assembly required)
 
@@ -199,15 +199,38 @@ For a camera-focused build like this one, digital HD is the more natural fit sin
 The baseline spec (6S 1300–1500mAh LiPo, 1700KV motors, gimbal-mounted camera) prioritizes agility and image stabilization over endurance. If flight time matters more than punch-out performance for your use case, the following changes are worth considering — independently or together. See purchase list §9 for the associated parts.
 
 ### 1. Battery: Li-ion Instead of High-C LiPo
-Swap the 6S LiPo pack for a 6S Li-ion pack built from high-drain cells (e.g., Molicel P42A/P45B 21700). Li-ion has roughly double the energy density of LiPo at the discharge rates this build actually needs (cruise flight, not racing), so a similarly-sized/weighted pack can extend flight time from ~6–8 minutes to ~12–18 minutes.
-- **Tradeoffs:** lower max discharge current (a non-issue for a cruising camera platform, but avoid punchy throttle stabs), slower charge times, and higher upfront cost (~$60–100/pack vs. $30–40 for LiPo).
-- **Failsafe reconfiguration required:** Li-ion's voltage curve is flatter across most of the discharge range but drops sharply near cutoff, unlike LiPo's more gradual sag. Update the flight controller's low-battery voltage failsafe thresholds (Mission Planner/QGC battery monitor settings) for Li-ion before its first flight — reusing LiPo thresholds risks either a false-early RTL or a battery over-discharged before failsafe triggers.
+Swap the 6S1P LiPo pack for a 6S1P Li-ion pack built from high-drain 21700 cells (Molicel P45B preferred, P42A acceptable — see purchase list §5b for cell specs, pack geometry, and dimensions). Li-ion has roughly double the energy density of LiPo at the discharge rates this build actually needs (cruise flight, not racing) — a P45B-based pack runs ~97 Wh at ~450–470g versus ~29 Wh at ~220–230g for the baseline 1300mAh LiPo — so flight time can extend from ~6–8 minutes to ~12–18 minutes.
+- **Tradeoffs:** lower max discharge current, slower charge times, and higher upfront cost (~$60–100/pack vs. $30–40 for LiPo).
+- **Current limit is not optional, it's required.** A 6S1P pack has one cell's rating as its ceiling — 45A for the P45B/P42A, for the whole aircraft — with no parallel cells to share load. Hover draw (~10–15A) is well within that, but a hard throttle punch on four 2207 motors at 6S can exceed 45A, which is also above the PM02 V3/PM06 V2 lead's 60A burst rating (purchase list §1). Set a firmware current limit (ArduPilot: `MOT_BAT_CURR_MAX`, tuned to something below the pack's continuous rating with margin) before the first Li-ion flight, and fly it as a cruiser rather than a puncher.
+- **Failsafe reconfiguration required:** Li-ion's voltage curve is flatter across most of the discharge range but drops sharply near cutoff, unlike LiPo's more gradual sag. Update the flight controller's low-battery voltage failsafe thresholds (`BATT_LOW_VOLT`, `BATT_CRT_VOLT` in ArduPilot, or the equivalent Mission Planner/QGC battery monitor fields) for Li-ion before its first flight — reusing LiPo thresholds risks either a false-early RTL or a battery over-discharged before failsafe triggers. Also set `BATT_FS_VOLTSRC` to use sag-corrected voltage rather than raw voltage, so a hard throttle input doesn't trip a false failsafe on Li-ion's steeper sag curve.
 - Confirm your charger supports a Li-ion charge profile, not just LiPo — most modern 6S balance chargers do, but check before assuming.
+- **Mounting:** the Li-ion pack's geometry doesn't match the LiPo bay — see purchase list §5b for why it's mounted externally on the top plate rather than in the printed bay, and the CG check that comes with it.
 
-### 2. Motor & Propeller: Lower KV, Larger/Higher-Pitch Prop
-Replace the 1700KV motors with a lower-KV option (roughly 1400–1500KV) and pair with a slightly larger or higher-pitch propeller. This trades peak thrust and agility for efficiency — hover current draw drops noticeably, which extends flight time at effectively no added weight and no added cost versus the baseline motor spec.
+### 2. Motor & Propeller: Lower KV, Bi-Blade Prop, Pitch Matched to KV
+Replace the 1700KV motors with a lower-KV option (roughly 1400–1500KV) and swap the baseline 5040 **tri-blade** propellers for a 5" **bi-blade**. This trades peak thrust and agility for efficiency — hover current draw drops noticeably, which extends flight time at effectively no added weight and no added cost versus the baseline motor spec.
+
+**The metric that matters is grams of thrust per watt (g/W) at hover, not peak thrust.** Manufacturer thrust tables usually headline max thrust; the number to read is the one at roughly a quarter of max, which is where a cruising camera platform actually spends the entire flight. Three physical properties drive that figure, in descending order of impact:
+
+1. **Disc area (diameter) — dominant, but fixed on this build.** Induced power scales roughly as thrust^1.5 / √(disc area), so more disc area for the same thrust is the single largest efficiency win available to any multirotor. It is *not* available here: all three frame options in §3 are 5" ducted cages, and the duct sets tip clearance. Going larger means rescaling the frame, not buying a different prop.
+2. **Blade count — the biggest lever you actually have.** Two blades beat three at the same diameter and pitch, typically by around 10–15% in hover g/W, because each blade isn't flying through the wake of the one ahead of it. Since diameter is unchanged, a tri-blade → bi-blade swap needs no duct clearance re-check, costs nothing extra, and is the cheapest endurance gain in the build.
+3. **Pitch — a motor-loading match, not an efficiency lever.** At a fixed diameter, lower pitch is generally the *more* efficient hover prop; high pitch buys top speed and punch-out, which is exactly what this optimization is trading away. What justifies adding pitch here is reloading the slower motor, not efficiency in itself — see below.
+
+**Why the KV change forces a pitch decision:** at 6S, dropping 1700KV → 1400KV takes unloaded RPM from roughly 37,700 to 31,100, about −17%. Static thrust scales with RPM², so on an unchanged propeller you would lose roughly 30% of peak thrust and hover throttle would climb accordingly. Pitch is how you recover that thrust — but adding pitch spends part of the efficiency you just bought. Start at the low end and add pitch only if the hover throttle check below comes out high.
+
+**What to buy:** 5" diameter (fixed by the duct), **2 blades**, pitch roughly 3.5–4.5" (pitch-to-diameter ratio ≈ 0.7–0.9), light stiff polycarbonate. Skip heavy reinforced racing props — the added rotational mass and blade thickness both work against you here. HQProp's 5x4.3x2 and 5x3.5x2 are reasonable starting candidates in this class, but treat any specific model as a candidate to verify against its own thrust data at the hover point rather than a settled answer.
+
+**Verify with the hover throttle check.** After a hover flight, read ArduPilot's `MOT_THST_HOVER`:
+- **0.35–0.45** — the target band. Good efficiency with enough authority left for wind and attitude correction.
+- **Below ~0.25** — overpropped. You're carrying thrust you never use; that mass would have been better spent on battery.
+- **Above ~0.5** — too little margin. Reduce weight or add pitch.
+
+Aim for roughly 2–2.5:1 total thrust-to-weight for an endurance cruiser, versus the 5:1 or more a racing build wants.
+
+**Then measure instead of guessing.** The power module (§1) gives you calibrated current sensing, so you can A/B propellers empirically without a thrust stand: hover each candidate for 60 seconds at identical takeoff weight and compare mAh consumed from the battery monitor log. That single test accounts for your duct, your actual all-up weight, and your ESC — all things a spec sheet cannot. Buy two or three candidate props and fly the comparison.
+
 - **Tradeoffs:** reduced punch-out/acceleration performance — not a concern for a cruising camera platform, but noticeable if you ever want aggressive maneuvers.
-- Confirm the new propeller still clears the frame's duct/cage geometry before ordering (§3) — a larger prop may not fit the baseline duct clearance.
+- Any propeller change still needs a duct/cage clearance check against §3 before ordering. A bi-blade swap at the same diameter is clearance-neutral; anything that changes diameter is not.
+- **Expectation setting on the cage:** a shrouded rotor *can* outperform an open one, but only with tight tip clearance (roughly 1–2% of radius) and a proper diffuser profile. Printed cinewhoop ducts generally have looser clearance than that and add mass, so an enclosed 5" is usually somewhat *less* efficient than an open-prop quad on the same propellers. Propeller choice here is worth on the order of 10–15%; the battery change in #1 and the payload decision in #3 are the larger numbers. The enclosed cage is a stated requirement of this build (see `drone_requirements_summary.md`), so this is a constraint to plan around, not a reason to change course — just don't expect propellers alone to move flight time much.
 
 ### 3. Payload: Skip the Gimbal, Use the Fixed Camera Mount — or Retain It
 Mount the action camera (GoPro Session / DJI Osmo Action) directly on the rigid 3D-printed camera bracket (already included in the frame print, §3, and in the parts list at purchase list §6) instead of the Holybro A8 Mini 3-axis gimbal. This removes the gimbal's ~130–180g and its full cost from the build.
@@ -255,6 +278,6 @@ Combined, these three changes stack: a lighter payload, a more efficient motor/p
 
 ---
 
-**Document Version:** 1.6
-**Last Updated:** August 2025
+**Document Version:** 1.7
+**Last Updated:** August 2026
 **Companion Documents:** `drone_purchase_list.md`, `drone_frame_merge_guide.md`, `drone_kit_alternatives.md`, `drone_lora_still_image_uplink.md`, `drone_requirements_summary.md`
