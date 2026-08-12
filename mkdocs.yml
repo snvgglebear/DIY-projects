@@ -88,3 +88,4 @@ exclude_docs: |
 
 not_in_nav: |
   homelab/docker-compose.yml
+  docs_hosting_plan.md
