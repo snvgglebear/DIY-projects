@@ -5,16 +5,17 @@ Implementation of the recommendation in [`dashboard_options.md`](./dashboard_opt
 by [Authelia](https://www.authelia.com/) forward-auth, with Redis for
 Authelia session storage.
 
-This is a **standalone** `docker-compose.yml` — merge the `services`,
-`secrets`, and `volumes` blocks into your existing *arr-stack compose file
-when you're ready, or run it side-by-side on the same `homelab` Docker
-network so Homepage can reach the other containers by name.
+These services (`homepage`, `authelia`, `redis`) are merged into
+[`arrstack-compose.yml`](./arrstack-compose.yml), on the `homelab` Docker
+network, alongside the rest of the *arr stack. See
+[`dashboard_options.md`](./dashboard_options.md) for the remaining setup
+checklist.
 
 ## Files
 
 ```
 homelab/
-├── docker-compose.yml
+├── arrstack-compose.yml           # homepage/authelia/redis services live here
 ├── .env.example
 ├── secrets/                       # gitignored — generate locally
 └── config/
@@ -57,17 +58,19 @@ homelab/
 
 5. **Bring it up**:
    ```
-   docker compose up -d
+   docker compose -f arrstack-compose.yml up -d
    ```
-   Homepage listens on `:3000`, Authelia on `:9091`.
+   Homepage listens on host port `3001` (`3000` was already in use locally),
+   Authelia on host port `9092` (`9091` was already claimed by
+   gluetun/transmission).
 
 ## Nginx Proxy Manager wiring
 
 Create two proxy hosts on the VPS, both pointing at the home server's
 WireGuard IP:
 
-- `dash.snvgglebear.com` → `http://<wg-ip>:3000` (Homepage)
-- `auth.snvgglebear.com` → `http://<wg-ip>:9091` (Authelia portal)
+- `dash.snvgglebear.com` → `http://<wg-ip>:3001` (Homepage)
+- `auth.snvgglebear.com` → `http://<wg-ip>:9092` (Authelia portal)
 
 Then, in NPM's **Advanced** tab for `dash.snvgglebear.com` (and any other
 subdomain you want gated), add:
@@ -75,7 +78,7 @@ subdomain you want gated), add:
 ```nginx
 location /authelia {
     internal;
-    set $upstream_authelia http://<wg-ip>:9091/api/verify;
+    set $upstream_authelia http://<wg-ip>:9092/api/verify;
     proxy_pass_request_body off;
     proxy_pass $upstream_authelia;
     proxy_set_header Content-Length "";

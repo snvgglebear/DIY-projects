@@ -1,0 +1,352 @@
+
+
+services:
+
+  # ===========================================================================
+  # VPN LAYER - Gluetun (All torrent traffic routed through this)
+  # ===========================================================================
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    security_opt:
+      - label:disable
+    ports:
+      - 8000:8000 # Control server
+      - 9091:9091 #transmission
+      - 51413:51413/udp #transmission
+      - 51413:51413 #transmission
+      - 9696:9696 #prowlarr
+      - 7878:7878 #radarr
+      - 8989:8989 #sonarr
+      #- 6767:6767 #bazarr
+      - 8191:8191 #flaresolvarr
+      - 8686:8686 #lidarr
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_IMPLEMENTATION=userspace
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=10.2.0.2/32
+      - VPN_PORT_FORWARDING=on
+      #- PORT_FORWARD_ONLY=on
+      - SERVER_COUNTRIES=United States
+      - TZ=America/New_York
+    # from gluetun v3.40.0+ control server auth, mapping config.toml with api key is required
+    volumes:
+      - ./gluetun/config.toml:/gluetun/auth/config.toml:z
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://ipinfo.io"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      # - TRANSMISSION_WEB_HOME= #optional
+      # - USER= #optional
+      # - PASS= #optional
+      # - WHITELIST= #optional
+      # - PEERPORT= #optional
+      # - HOST_WHITELIST= #optional
+    volumes:
+      - ./transmission/config:/config:z
+      - /mnt/media_storage/media/Torrents:/downloads:z #optional
+    #ports:
+      # - 9090:9091
+      #- 33845:33845
+      #- 33845:33845/udp
+    restart: unless-stopped
+
+  # ===========================================================================
+  # INDEXER LAYER - Prowlarr
+  # ===========================================================================
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    #platform: "x86-64"
+    container_name: prowlarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    #ports:
+    #  - 9696:9696
+    volumes:
+      - ./prowlarr/config:/config:z
+    restart: unless-stopped
+
+  # ===========================================================================
+  # CLOUDFLARE BYPASS - FlareSolverr
+  # ===========================================================================
+  flaresolverr:
+    #platform: "x86-64"
+    image: ghcr.io/flaresolverr/flaresolverr
+    container_name: flaresolverr
+    network_mode: service:gluetun
+    environment:
+      - TZ=America/New_York
+      - PUID=1000
+      - PGID=1000
+    #ports:
+    #  - 8191:8191
+    restart: unless-stopped
+
+  # ===========================================================================
+  # MEDIA MANAGERS
+  # ===========================================================================
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    #platform: "x86-64"
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    network_mode: service:gluetun
+    #ports:
+    #  - 7878:7878
+    volumes:
+      - ./radarr:/config:z
+      - /mnt/media_storage/media/Movies:/Movies:z
+      - /mnt/media_storage/media/Torrents/complete/Movies:/downloads/complete/Movies:z
+      - /mnt/media_storage/media/Torrents/Movies:/data/Movies:z
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    #platform: "x86-64"
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    network_mode: service:gluetun
+    #ports:
+    #  - 8989:8989
+    volumes:
+      - ./sonarr/config:/config:z
+      - /mnt/media_storage/media/Shows:/Shows:z
+      - /mnt/media_storage/media/Torrents/complete/Shows:/downloads/complete/Shows:z
+      - /mnt/media_storage/media/Torrents/Shows:/data/Shows:z
+    restart: unless-stopped
+
+  lidarr:
+    image: lscr.io/linuxserver/lidarr
+    #platform: "x86-64"
+    container_name: lidarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    #ports:
+    #  - 8686:8686
+    volumes:
+      - ./lidarr/config:/config:z
+      - /mnt/media_storage/media/Music:/Music:z
+      - /mnt/media_storage/media/Torrents/complete/Music:/downloads/complete/Music:z
+    restart: unless-stopped
+
+  # ===========================================================================
+  # SUBTITLE MANAGER - Bazarr
+  # ===========================================================================
+  bazarr:
+    image: lscr.io/linuxserver/bazarr
+    #platform: "x86-64"
+    container_name: bazarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    #ports:
+    #  - 6767:6767
+    volumes:
+      - ./bazarr/config:/config:z
+      - /mnt/media_storage/media:/data/media:z
+    restart: unless-stopped
+
+  # ===========================================================================
+  # MEDIA SERVER - Jellyfin
+  # ===========================================================================
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - TZ=America/New_York
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - 8096:8096
+      - 8920:8920
+      - 7359:7359/udp
+      - 1900:1900/udp
+
+    volumes:
+      - ./jellyfin/config:/config:z
+      - ./jellyfin/cache:/cache:z
+      - type: bind
+        source: /mnt/media_storage/media
+        target: /media
+        read_only: true
+
+    # Hardware transcoding (Intel)
+    # devices:
+    #   - /dev/dri:/dev/dri
+    restart: unless-stopped
+
+  # ===========================================================================
+  # REQUEST MANAGEMENT - Jellyseerr
+  # ===========================================================================
+  jellyseerr:  
+    image: ghcr.io/seerr-team/seerr:latest
+    init: true
+    container_name: jellyseerr
+    #network_mode: "service:gluetun"
+    environment:
+      - TZ=America/New_York
+      - PUID=1000
+      - PGID=1000
+    ports:
+     - 5055:5055
+    depends_on:
+       gluetun:
+         condition: service_healthy
+    volumes:
+      - ./jellyseer/config:/app/config:z
+    restart: unless-stopped
+
+  # ===========================================================================
+  # NOTIFICATIONS - Notifiarr
+  # ===========================================================================
+  notifiarr:
+    #platform: "x86-64"
+    image: golift/notifiarr
+    container_name: notifiarr
+    hostname: media-server
+    environment:
+      - TZ=America/New_York
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - 5454:5454
+    volumes:
+      - ./notifiarr/config:/config:z
+      - /var/run/utmp:/var/run/utmp:ro
+    restart: unless-stopped
+
+  whisparr:
+    container_name: whisparr
+    image: ghcr.io/hotio/whisparr
+    ports:
+      - "6969:6969"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=America/New_York
+      - WEBUI_PORTS=6969/tcp
+    volumes:
+      - ./whisparr/config:/config:z
+      - /mnt/media_storage/media/Adult:/Adult
+      - /mnt/media_storage/media/Torrents/complete/Adult:/downloads/complete/Adult
+
+  # ===========================================================================
+  # REVERSE PROXY - Nginx Proxy Manager
+  # ===========================================================================
+  #npm:
+  #  image: jc21/nginx-proxy-manager:latest
+  #  container_name: npm
+  #  ports:
+  #    - 80:80
+  #    - 443:443
+  #    - 81:81
+  #  volumes:
+  #    - ./npm/data:/data
+  #    - ./npm/letsencrypt:/etc/letsencrypt
+  #  restart: unless-stopped
+
+  # ===========================================================================
+  # DASHBOARD - Homepage + Authelia forward-auth + Redis
+  #
+  # Assumes NPM already exists and terminates TLS on the VPS; this stack only
+  # needs to be reachable over the WireGuard tunnel from NPM.
+  #
+  # Before starting:
+  #   1. cp .env.example .env   and fill in the values
+  #   2. Generate secrets (see README.md) into ./secrets/
+  #   3. Edit config/authelia/configuration.yml and users_database.yml
+  #   4. Edit config/homepage/*.yaml for your actual services
+  # ===========================================================================
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./config/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: ${DASHBOARD_DOMAIN}
+    networks:
+      - homelab
+
+  authelia:
+    image: authelia/authelia:latest
+    container_name: authelia
+    restart: unless-stopped
+    ports:
+      # Host port shifted to 9092 -- gluetun already claims 9091 for
+      # transmission's WebUI. Point NPM's proxy host at :9092.
+      - "9092:9091"
+    volumes:
+      - ./config/authelia:/config
+    environment:
+      TZ: ${TZ:-UTC}
+      AUTHELIA_JWT_SECRET_FILE: /run/secrets/authelia_jwt_secret
+      AUTHELIA_SESSION_SECRET_FILE: /run/secrets/authelia_session_secret
+      AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: /run/secrets/authelia_storage_encryption_key
+    secrets:
+      - authelia_jwt_secret
+      - authelia_session_secret
+      - authelia_storage_encryption_key
+    depends_on:
+      - redis
+    networks:
+      - homelab
+
+  redis:
+    image: redis:7-alpine
+    container_name: authelia-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - homelab
+
+secrets:
+  authelia_jwt_secret:
+    file: ./secrets/jwt_secret.txt
+  authelia_session_secret:
+    file: ./secrets/session_secret.txt
+  authelia_storage_encryption_key:
+    file: ./secrets/storage_encryption_key.txt
+
+volumes:
+  redis-data:
+
+networks:
+  homelab:
+    name: homelab
