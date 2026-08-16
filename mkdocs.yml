@@ -73,6 +73,8 @@ nav:
   - Homelab:
       - Dashboard stack: homelab/README.md
       - Dashboard options: homelab/dashboard_options.md
+  - Link collection bot:
+      - Plan: link-bot/plan.md
 
 # Everything left in the tree gets copied into the published site, so keep
 # config and secrets out of it. docker-compose.yml stays in: dashboard_options.md
