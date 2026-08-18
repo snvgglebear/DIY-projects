@@ -63,6 +63,7 @@ nav:
   - Ender 5 Plus / Mercury One.1:
       - Electronics enclosure options: ender5-mercury-one/electronics_enclosure_options.md
       - Toolhead printed parts: ender5-mercury-one/toolhead_printed_parts.md
+      - Multi-Z (quad Z) mod: ender5-mercury-one/quad_z_mod.md
       - Enclosure research summary: ender5-mercury-one/enclosure_research_summary.md
   - Drone build:
       - Build guide: drone-build/drone_build_guide.md

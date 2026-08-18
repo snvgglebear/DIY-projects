@@ -13,6 +13,7 @@ BTT Octopus V1.1, BTT Pi V1.2 and TFT35-E3 V3.0.1.
 
 - [Electronics enclosure options](ender5-mercury-one/electronics_enclosure_options.md) — official ZeroG enclosure and configurator, community base/skirt and frame-mount alternatives, DIN rail interiors, screen mounting, hardware list
 - [Toolhead printed parts](ender5-mercury-one/toolhead_printed_parts.md) — EVA 2.4 BOM for E3D V6 + LGX Lite, ZeroG's toolhead configurator, CAN vs direct wiring
+- [Multi-Z (quad Z) mod](ender5-mercury-one/quad_z_mod.md) — four-motor bed tramming: brackets, ZeroG Hydra, Klipper `z_tilt` and Marlin `G34` references
 - [Enclosure research summary](ender5-mercury-one/enclosure_research_summary.md) — short-form research notes
 
 ### Drone build
