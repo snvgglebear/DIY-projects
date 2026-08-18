@@ -35,6 +35,13 @@ WireGuard tunnel.
 - [Dashboard stack](homelab/README.md) — Homepage + Authelia compose setup
 - [Dashboard options](homelab/dashboard_options.md) — comparison and recommendation
 
+### Link collection bot
+
+A Discord/Twilio bot that files a submitted link + category into a links
+page on this site, prompting to confirm before creating a new category.
+
+- [Plan](link-bot/plan.md) — architecture, data model, category confirmation flow, deployment
+
 ## Building the site locally
 
 The site is [MkDocs](https://www.mkdocs.org/) with the
