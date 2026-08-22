@@ -74,6 +74,8 @@ nav:
   - Homelab:
       - Dashboard stack: homelab/README.md
       - Dashboard options: homelab/dashboard_options.md
+  - Meshtastic mesh:
+      - Bill of materials: meshtastic-mesh/meshtastic_bom.md
   - Link collection bot:
       - Plan: link-bot/plan.md
 
