@@ -35,6 +35,13 @@ WireGuard tunnel.
 - [Dashboard stack](homelab/README.md) — Homepage + Authelia compose setup
 - [Dashboard options](homelab/dashboard_options.md) — comparison and recommendation
 
+### Rooftop Meshtastic mesh
+
+Flat-roof-mounted Meshtastic mesh node with vertically separated antennas,
+1W radios, and solar + PoE power options.
+
+- [Bill of materials](meshtastic-mesh/meshtastic_bom.md) — radios, antennas, digital TV antenna add-on, power system, mounting and cabling
+
 ### Link collection bot
 
 A Discord/Twilio bot that files a submitted link + category into a links
